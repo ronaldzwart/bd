@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Belastingdienst Content Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div>
+            <div class="brand-title">Belastingdienst Content Generator</div>
+            <div class="brand-sub">Snel professionele uitingen, zonder vormgevingstress</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="btn ghost">Project opslaan</button>
+          <button class="btn primary">Exporteren</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <h2>1. Bronnen</h2>
+          <div class="upload">
+            <div class="upload-drop">
+              <div class="upload-icon">+</div>
+              <div>
+                <div class="upload-title">Sleep bestanden of klik om te uploaden</div>
+                <div class="upload-sub">PDF, DOCX, TXT, CSV, PNG, JPG</div>
+              </div>
+              <button class="btn small">Bestanden kiezen</button>
+            </div>
+            <label class="label">Snelle notities</label>
+            <textarea class="textarea" placeholder="Plak hier notities, ruwe data of samenvattingen..."></textarea>
+            <div class="source-list">
+              <div class="source-item">
+                <div class="thumb">PDF</div>
+                <div>
+                  <div class="source-title">Gebruikersonderzoek_Q4.pdf</div>
+                  <div class="source-sub">12 pagina's · 3,4 MB</div>
+                </div>
+                <button class="chip">Hernoem</button>
+                <button class="chip danger">Verwijder</button>
+              </div>
+              <div class="source-item">
+                <div class="thumb">CSV</div>
+                <div>
+                  <div class="source-title">Statistieken_bezoek.csv</div>
+                  <div class="source-sub">2.431 regels</div>
+                </div>
+                <button class="chip">Hernoem</button>
+                <button class="chip danger">Verwijder</button>
+              </div>
+              <div class="source-item">
+                <div class="thumb">IMG</div>
+                <div>
+                  <div class="source-title">Screenshots_portal.png</div>
+                  <div class="source-sub">6 afbeeldingen</div>
+                </div>
+                <button class="chip">Hernoem</button>
+                <button class="chip danger">Verwijder</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>2. Type uiting</h2>
+          <div class="tabs">
+            <button class="tab active" data-tab="rapportage">Rapportage</button>
+            <button class="tab" data-tab="presentatie">Presentatie</button>
+            <button class="tab" data-tab="infographic">Infographic</button>
+          </div>
+          <div class="template-grid" id="templateGrid">
+            <button class="template-card active" data-template="Gebruikerstest">
+              <div class="template-label">Gebruikerstest</div>
+              <div class="template-meta">Cover + managementsamenvatting</div>
+            </button>
+            <button class="template-card" data-template="Onderzoeksrapport">
+              <div class="template-label">Onderzoeksrapport</div>
+              <div class="template-meta">Methodiek + bevindingen</div>
+            </button>
+            <button class="template-card" data-template="Evaluatie">
+              <div class="template-label">Evaluatie</div>
+              <div class="template-meta">Doelstellingen + conclusies</div>
+            </button>
+          </div>
+          <label class="label">Aanvullende instructies</label>
+          <input class="input" type="text" placeholder="Bijv. focus op pijnpunten, voeg quotes toe" />
+          <button class="btn primary wide" id="generateBtn">Genereer eerste versie</button>
+        </section>
+
+        <section class="panel wide">
+          <div class="preview-header">
+            <div>
+              <h2>3. Preview & bewerken</h2>
+              <p class="muted">Klik op tekst om direct aan te passen. Zoom en feedback voor opnieuw genereren.</p>
+            </div>
+            <div class="preview-actions">
+              <button class="btn ghost">Opnieuw genereren</button>
+              <div class="zoom">
+                <button class="chip">-</button>
+                <span>100%</span>
+                <button class="chip">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="preview" id="preview">
+            <div class="preview-cover">
+              <div class="cover-mark"></div>
+              <div>
+                <div class="cover-title" contenteditable="true">Gebruikerstest Rapportage</div>
+                <div class="cover-sub" contenteditable="true">Belastingdienst · Digitaal Loket · Q4 2026</div>
+              </div>
+            </div>
+            <div class="preview-body">
+              <div class="preview-section">
+                <h3 contenteditable="true">Managementsamenvatting</h3>
+                <p contenteditable="true">De belangrijkste frictie zit in het inloggen en het vinden van de juiste regeling. Gebruikers waarderen de duidelijke taal, maar willen sneller feedback op fouten.</p>
+              </div>
+              <div class="preview-section">
+                <h3 contenteditable="true">Belangrijkste bevindingen</h3>
+                <ul contenteditable="true">
+                  <li>63% haakte af tijdens stap 2 door ontbrekende context.</li>
+                  <li>Positieve feedback op de nieuwe zoekfunctie (+18%).</li>
+                  <li>Gebruikers verwachten visuele voorbeelden bij complexe vragen.</li>
+                </ul>
+              </div>
+              <div class="preview-section split">
+                <div class="insight positive">
+                  <div class="insight-label">Positief</div>
+                  <div class="insight-value">+18%</div>
+                  <div class="insight-text" contenteditable="true">Meer succesvolle zoekopdrachten na herontwerp.</div>
+                </div>
+                <div class="insight negative">
+                  <div class="insight-label">Negatief</div>
+                  <div class="insight-value">-27%</div>
+                  <div class="insight-text" contenteditable="true">Drop-off bij het uploaden van bijlagen.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div>Belastingdienst huisstijl · Templatebibliotheek v1</div>
+        <div>Export: PDF · DOCX · HTML</div>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
