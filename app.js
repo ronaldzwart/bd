@@ -191,6 +191,16 @@ function renderTemplates() {
 
     details.appendChild(list);
     templateAccordion.appendChild(details);
+
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        templateAccordion.querySelectorAll('details').forEach((other) => {
+          if (other !== details) {
+            other.open = false;
+          }
+        });
+      }
+    });
   });
   updatePreviewTitle('Nieuwe template');
 }
