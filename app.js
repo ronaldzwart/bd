@@ -8,6 +8,7 @@ const pasteButton = document.getElementById('pasteButton');
 const pasteBox = document.getElementById('pasteBox');
 const exportBtn = document.getElementById('exportBtn');
 const exportList = document.getElementById('exportList');
+const exportMenu = document.getElementById('exportMenu');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 
@@ -214,9 +215,11 @@ function updatePreviewTitle(templateName) {
 }
 
 generateBtn.addEventListener('click', () => {
-  generateBtn.textContent = '→';
+  exportMenu.classList.remove('hidden');
+  generateBtn.classList.add('secondary');
+  generateBtn.textContent = 'Genereer nogmaals';
   setTimeout(() => {
-    generateBtn.textContent = '→';
+    generateBtn.textContent = 'Genereer nogmaals';
   }, 900);
 });
 

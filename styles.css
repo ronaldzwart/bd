@@ -368,6 +368,25 @@ h2 {
   color: var(--accent);
 }
 
+.generate-btn {
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.generate-btn.secondary {
+  background: #ffffff;
+  border: 1px solid #c8d6e2;
+  color: var(--accent);
+  box-shadow: none;
+}
+
+.generate-btn .arrow {
+  font-size: 16px;
+}
+
 .btn.ghost {
   background: transparent;
   border: 1px solid var(--line);
@@ -447,6 +466,10 @@ h2 {
 
 .export-menu {
   position: relative;
+}
+
+.export-menu.hidden {
+  display: none;
 }
 
 .export-menu .caret {
