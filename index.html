@@ -17,10 +17,6 @@
             <div class="brand-sub">Templates · Bronnen · Snelle output</div>
           </div>
         </div>
-        <div class="top-actions">
-          <button class="btn ghost">Project opslaan</button>
-          <button class="btn primary">Exporteren</button>
-        </div>
       </header>
 
       <main class="layout">
@@ -35,12 +31,18 @@
           <div class="upload">
             <input id="fileInput" class="file-input" type="file" multiple />
             <div class="upload-drop" id="uploadDrop">
-              <div class="upload-icon">+</div>
               <div>
                 <div class="upload-title">Sleep bestanden of klik om te uploaden</div>
                 <div class="upload-sub">PDF, DOCX, TXT, CSV, PNG, JPG</div>
               </div>
-              <button class="btn small" id="fileButton" type="button">Bestanden kiezen</button>
+              <div class="upload-actions">
+                <button class="btn small" id="fileButton" type="button">Bestanden kiezen</button>
+                <button class="btn small ghost" id="pasteButton" type="button">Tekst plakken</button>
+              </div>
+            </div>
+            <div class="paste-box" id="pasteBox">
+              <label class="label">Tekst plakken</label>
+              <textarea class="textarea" placeholder="Plak hier notities, ruwe data of samenvattingen..."></textarea>
             </div>
             <div class="source-list" id="sourceList">
               <div class="source-empty" id="sourceEmpty">
@@ -74,15 +76,15 @@
             <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
             <button class="btn primary" id="generateBtn">Genereren</button>
           </div>
-          <div class="export-row">
-            <button class="btn ghost">Exporteren als</button>
-          </div>
         </section>
       </main>
 
       <footer class="footer">
         <div>Templatebibliotheek v1</div>
-        <div>Export: PDF · DOCX · HTML</div>
+        <div class="footer-actions">
+          <span>Export: PDF · DOCX · HTML</span>
+          <button class="btn primary">Exporteren</button>
+        </div>
       </footer>
     </div>
 

@@ -117,6 +117,12 @@ h2 {
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
+.upload-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .upload-drop.dragover {
   border-color: var(--accent);
   background: #eef6fc;
@@ -155,6 +161,15 @@ h2 {
   border-radius: 12px;
   border: 1px solid var(--line);
   font-family: inherit;
+}
+
+.paste-box {
+  display: none;
+  gap: 10px;
+}
+
+.paste-box.active {
+  display: grid;
 }
 
 .source-list {
@@ -229,6 +244,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background 0.2s ease;
 }
 
 .template-group summary::-webkit-details-marker {
@@ -241,12 +257,24 @@ h2 {
   font-weight: 500;
 }
 
+.template-group summary .chevron {
+  font-size: 16px;
+  color: var(--accent);
+  transition: transform 0.2s ease;
+  margin-left: 8px;
+}
+
+.template-group[open] summary .chevron {
+  transform: rotate(180deg);
+}
+
 .template-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   padding: 12px;
   background: #ffffff;
+  animation: templateIn 0.18s ease-out;
 }
 
 .template-card {
@@ -259,6 +287,17 @@ h2 {
   min-height: 76px;
   display: grid;
   gap: 6px;
+}
+
+.template-card.new {
+  border-style: dashed;
+  background: #f7fbff;
+}
+
+.template-plus {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .template-card.active {
@@ -308,6 +347,11 @@ h2 {
   background: var(--accent);
   color: white;
   box-shadow: 0 12px 24px rgba(0, 108, 169, 0.25);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
 }
 
 .btn.ghost {
@@ -392,6 +436,12 @@ h2 {
   color: var(--muted);
 }
 
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 @media (max-width: 1100px) {
   .layout {
     grid-template-columns: 1fr;
@@ -435,4 +485,15 @@ h2 {
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
+}
+
+@keyframes templateIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

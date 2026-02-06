@@ -4,6 +4,8 @@ const templateAccordion = document.getElementById('templateAccordion');
 const uploadDrop = document.getElementById('uploadDrop');
 const fileInput = document.getElementById('fileInput');
 const fileButton = document.getElementById('fileButton');
+const pasteButton = document.getElementById('pasteButton');
+const pasteBox = document.getElementById('pasteBox');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 
@@ -149,12 +151,27 @@ function renderTemplates() {
     const summary = document.createElement('summary');
     summary.textContent = group.label;
     const summaryNote = document.createElement('span');
-    summaryNote.textContent = `${group.templates.length} templates`;
+    summaryNote.textContent = `${group.templates.length + 1} templates`;
+    const summaryChevron = document.createElement('span');
+    summaryChevron.className = 'chevron';
+    summaryChevron.textContent = '⌄';
     summary.appendChild(summaryNote);
+    summary.appendChild(summaryChevron);
     details.appendChild(summary);
 
     const list = document.createElement('div');
     list.className = 'template-list';
+
+    const newCard = document.createElement('button');
+    newCard.className = 'template-card new';
+    newCard.dataset.template = 'Nieuwe template';
+    newCard.innerHTML = `
+      <div class="template-thumb template-plus">+</div>
+      <div class="template-label">Nieuwe template</div>
+      <div class="template-meta">Start met een leeg template</div>
+    `;
+    newCard.addEventListener('click', () => selectTemplate(newCard));
+    list.appendChild(newCard);
 
     group.templates.forEach((template, templateIndex) => {
       const button = document.createElement('button');
@@ -172,7 +189,7 @@ function renderTemplates() {
     details.appendChild(list);
     templateAccordion.appendChild(details);
   });
-  updatePreviewTitle(templatesByCategory[0].templates[0].name);
+  updatePreviewTitle('Nieuwe template');
 }
 
 function selectTemplate(button) {
@@ -205,8 +222,16 @@ fileButton.addEventListener('click', () => {
   fileInput.click();
 });
 
+pasteButton.addEventListener('click', () => {
+  pasteBox.classList.toggle('active');
+  if (pasteBox.classList.contains('active')) {
+    const textarea = pasteBox.querySelector('textarea');
+    textarea.focus();
+  }
+});
+
 uploadDrop.addEventListener('click', (event) => {
-  if (event.target !== fileButton) {
+  if (event.target !== fileButton && event.target !== pasteButton) {
     fileInput.click();
   }
 });
