@@ -274,7 +274,14 @@ h2 {
   gap: 10px;
   padding: 12px;
   background: #ffffff;
-  animation: templateIn 0.18s ease-out;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+
+.template-list.open {
+  opacity: 1;
 }
 
 .template-card {
@@ -555,15 +562,4 @@ h2 {
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
-}
-
-@keyframes templateIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

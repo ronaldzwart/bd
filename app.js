@@ -200,9 +200,24 @@ function renderTemplates() {
           }
         });
       }
+      updateAccordionAnimation(details);
     });
+
+    updateAccordionAnimation(details);
   });
   updatePreviewTitle('Nieuwe template');
+}
+
+function updateAccordionAnimation(details) {
+  const list = details.querySelector('.template-list');
+  if (!list) return;
+  if (details.open) {
+    list.classList.add('open');
+    list.style.maxHeight = `${list.scrollHeight}px`;
+  } else {
+    list.classList.remove('open');
+    list.style.maxHeight = '0px';
+  }
 }
 
 function selectTemplate(button) {
