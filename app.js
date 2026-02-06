@@ -1,30 +1,41 @@
-const tabs = document.querySelectorAll('.tab');
-const templateGrid = document.getElementById('templateGrid');
 const generateBtn = document.getElementById('generateBtn');
 const previewTitle = document.querySelector('.cover-title');
+const templateAccordion = document.getElementById('templateAccordion');
 const uploadDrop = document.getElementById('uploadDrop');
 const fileInput = document.getElementById('fileInput');
 const fileButton = document.getElementById('fileButton');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 
-const templatesByCategory = {
-  rapportage: [
-    { name: 'Gebruikerstest', meta: 'Cover + managementsamenvatting' },
-    { name: 'Onderzoeksrapport', meta: 'Methodiek + bevindingen' },
-    { name: 'Evaluatie', meta: 'Doelstellingen + conclusies' },
-  ],
-  presentatie: [
-    { name: 'Projectupdate', meta: 'Voortgang + besluitpunten' },
-    { name: 'Resultaten', meta: 'KPI dashboards + highlights' },
-    { name: 'Voorstel', meta: 'Aanpak + impact' },
-  ],
-  infographic: [
-    { name: 'Proces', meta: 'Stappen + rollen' },
-    { name: 'Statistieken', meta: 'Data in visuele blokken' },
-    { name: 'Tijdlijn', meta: 'Fases + mijlpalen' },
-  ],
-};
+const templatesByCategory = [
+  {
+    id: 'presentaties',
+    label: 'Presentaties',
+    templates: [
+      { name: 'Projectupdate', meta: 'Voortgang + besluitpunten' },
+      { name: 'Resultaten', meta: 'KPI dashboards + highlights' },
+      { name: 'Voorstel', meta: 'Aanpak + impact' },
+    ],
+  },
+  {
+    id: 'rapportages',
+    label: 'Rapportages',
+    templates: [
+      { name: 'Gebruikerstest', meta: 'Cover + managementsamenvatting' },
+      { name: 'Onderzoeksrapport', meta: 'Methodiek + bevindingen' },
+      { name: 'Evaluatie', meta: 'Doelstellingen + conclusies' },
+    ],
+  },
+  {
+    id: 'infographics',
+    label: 'Infographics',
+    templates: [
+      { name: 'Proces', meta: 'Stappen + rollen' },
+      { name: 'Statistieken', meta: 'Data in visuele blokken' },
+      { name: 'Tijdlijn', meta: 'Fases + mijlpalen' },
+    ],
+  },
+];
 
 const sources = [];
 
@@ -128,20 +139,40 @@ function addFiles(fileList) {
   renderSources();
 }
 
-function renderTemplates(category) {
-  templateGrid.innerHTML = '';
-  templatesByCategory[category].forEach((template, index) => {
-    const button = document.createElement('button');
-    button.className = 'template-card' + (index === 0 ? ' active' : '');
-    button.dataset.template = template.name;
-    button.innerHTML = `
-      <div class="template-label">${template.name}</div>
-      <div class="template-meta">${template.meta}</div>
-    `;
-    button.addEventListener('click', () => selectTemplate(button));
-    templateGrid.appendChild(button);
+function renderTemplates() {
+  templateAccordion.innerHTML = '';
+  templatesByCategory.forEach((group, groupIndex) => {
+    const details = document.createElement('details');
+    details.className = 'template-group';
+    details.open = groupIndex === 0;
+
+    const summary = document.createElement('summary');
+    summary.textContent = group.label;
+    const summaryNote = document.createElement('span');
+    summaryNote.textContent = `${group.templates.length} templates`;
+    summary.appendChild(summaryNote);
+    details.appendChild(summary);
+
+    const list = document.createElement('div');
+    list.className = 'template-list';
+
+    group.templates.forEach((template, templateIndex) => {
+      const button = document.createElement('button');
+      button.className = 'template-card' + (groupIndex === 0 && templateIndex === 0 ? ' active' : '');
+      button.dataset.template = template.name;
+      button.innerHTML = `
+        <div class="template-thumb">Preview</div>
+        <div class="template-label">${template.name}</div>
+        <div class="template-meta">${template.meta}</div>
+      `;
+      button.addEventListener('click', () => selectTemplate(button));
+      list.appendChild(button);
+    });
+
+    details.appendChild(list);
+    templateAccordion.appendChild(details);
   });
-  updatePreviewTitle(templatesByCategory[category][0].name);
+  updatePreviewTitle(templatesByCategory[0].templates[0].name);
 }
 
 function selectTemplate(button) {
@@ -162,18 +193,10 @@ function updatePreviewTitle(templateName) {
   }`;
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    tabs.forEach((t) => t.classList.remove('active'));
-    tab.classList.add('active');
-    renderTemplates(tab.dataset.tab);
-  });
-});
-
 generateBtn.addEventListener('click', () => {
   generateBtn.textContent = 'Genereren...';
   setTimeout(() => {
-    generateBtn.textContent = 'Genereer eerste versie';
+    generateBtn.textContent = 'Genereren';
   }, 900);
 });
 
@@ -216,5 +239,5 @@ uploadDrop.addEventListener('drop', (event) => {
   }
 });
 
-renderTemplates('rapportage');
+renderTemplates();
 renderSources();
