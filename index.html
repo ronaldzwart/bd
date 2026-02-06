@@ -66,7 +66,7 @@
           </div>
           <div class="prompt-row">
             <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
-            <button class="btn primary icon" id="generateBtn" aria-label="Genereren">
+            <button class="btn ghost icon" id="generateBtn" aria-label="Genereren">
               <span class="arrow">→</span>
             </button>
           </div>
@@ -76,8 +76,19 @@
       <footer class="footer">
         <div>Templatebibliotheek v1</div>
         <div class="footer-actions">
-          <span>Export: PDF · DOCX · HTML</span>
-          <button class="btn primary">Exporteren als</button>
+          <div class="export-menu">
+            <button class="btn primary" id="exportBtn" type="button">
+              Exporteren als <span class="caret">▾</span>
+            </button>
+            <div class="export-list" id="exportList">
+              <button type="button">PDF</button>
+              <button type="button">DOCX</button>
+              <button type="button">HTML</button>
+              <button type="button">PPTX</button>
+              <button type="button">PNG</button>
+              <button type="button">SVG</button>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

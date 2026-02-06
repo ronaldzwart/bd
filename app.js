@@ -6,6 +6,8 @@ const fileInput = document.getElementById('fileInput');
 const fileButton = document.getElementById('fileButton');
 const pasteButton = document.getElementById('pasteButton');
 const pasteBox = document.getElementById('pasteBox');
+const exportBtn = document.getElementById('exportBtn');
+const exportList = document.getElementById('exportList');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 
@@ -233,6 +235,16 @@ pasteButton.addEventListener('click', () => {
 uploadDrop.addEventListener('click', (event) => {
   if (event.target !== fileButton && event.target !== pasteButton) {
     fileInput.click();
+  }
+});
+
+exportBtn.addEventListener('click', () => {
+  exportList.classList.toggle('open');
+});
+
+document.addEventListener('click', (event) => {
+  if (!exportBtn.contains(event.target) && !exportList.contains(event.target)) {
+    exportList.classList.remove('open');
   }
 });
 
