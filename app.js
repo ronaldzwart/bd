@@ -212,9 +212,9 @@ function updatePreviewTitle(templateName) {
 }
 
 generateBtn.addEventListener('click', () => {
-  generateBtn.textContent = 'Genereren...';
+  generateBtn.textContent = '→';
   setTimeout(() => {
-    generateBtn.textContent = 'Genereren';
+    generateBtn.textContent = '→';
   }, 900);
 });
 

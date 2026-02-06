@@ -349,6 +349,19 @@ h2 {
   box-shadow: 0 12px 24px rgba(0, 108, 169, 0.25);
 }
 
+.btn.icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.btn.icon .arrow {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .btn.ghost {
   background: transparent;
   border: 1px solid var(--line);
@@ -389,22 +402,6 @@ h2 {
   align-items: center;
   gap: 16px;
   margin-bottom: 12px;
-}
-
-.preview-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.zoom {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #f7f4f0;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
 }
 
 .preview {
