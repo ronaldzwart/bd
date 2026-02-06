@@ -184,6 +184,7 @@ function selectTemplate(button) {
 }
 
 function updatePreviewTitle(templateName) {
+  if (!previewTitle) return;
   previewTitle.textContent = `${templateName} ${
     templateName === 'Projectupdate' || templateName === 'Resultaten' || templateName === 'Voorstel'
       ? 'Presentatie'
