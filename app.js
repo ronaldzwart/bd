@@ -49,12 +49,20 @@ const templatesByCategory = [
 const sources = [];
 
 /* ── Navigation ── */
+const stepOrder = ['templates', 'bronnen', 'preview', 'export'];
+let currentStepIndex = 0;
+
 function switchSection(sectionKey) {
+  const newIndex = stepOrder.indexOf(sectionKey);
+  if (newIndex === -1) return;
+
+  // Update sections
   document.querySelectorAll('.section').forEach(function (s) {
     s.classList.remove('active');
   });
   document.querySelectorAll('.nav-item').forEach(function (n) {
     n.classList.remove('active');
+    n.classList.remove('completed');
   });
 
   var section = sectionMap[sectionKey];
@@ -63,17 +71,72 @@ function switchSection(sectionKey) {
     pageTitle.textContent = section.title;
   }
 
+  // Mark completed steps in sidebar
+  stepOrder.forEach(function (key, i) {
+    var navItem = document.querySelector('.nav-item[data-section="' + key + '"]');
+    if (!navItem) return;
+    if (i < newIndex) {
+      navItem.classList.add('completed');
+    }
+  });
+
   var navItem = document.querySelector('.nav-item[data-section="' + sectionKey + '"]');
   if (navItem) {
     navItem.classList.add('active');
   }
+
+  // Update stepper
+  document.querySelectorAll('.stepper-step').forEach(function (step, i) {
+    step.classList.remove('active', 'completed');
+    if (i < newIndex) {
+      step.classList.add('completed');
+    } else if (i === newIndex) {
+      step.classList.add('active');
+    }
+  });
+
+  // Update stepper lines
+  document.querySelectorAll('.stepper-line').forEach(function (line, i) {
+    line.classList.remove('completed');
+    if (i < newIndex) {
+      line.classList.add('completed');
+    }
+  });
+
+  currentStepIndex = newIndex;
 }
 
+// Sidebar nav clicks
 document.querySelectorAll('.nav-item').forEach(function (item) {
   item.addEventListener('click', function (e) {
     e.preventDefault();
     var section = this.getAttribute('data-section');
     switchSection(section);
+  });
+});
+
+// Stepper clicks
+document.querySelectorAll('.stepper-step').forEach(function (step) {
+  step.addEventListener('click', function () {
+    var section = this.getAttribute('data-step');
+    switchSection(section);
+  });
+});
+
+// Next/Previous buttons
+document.querySelectorAll('.next-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var next = this.getAttribute('data-next');
+    switchSection(next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+document.querySelectorAll('.prev-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var prev = this.getAttribute('data-prev');
+    switchSection(prev);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
 
