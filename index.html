@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Content Generator</title>
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
   </head>
   <body>
     <div class="app">
@@ -55,7 +55,10 @@
 
       <div class="main">
         <header class="topbar">
-          <h1 class="page-title" id="pageTitle">Templates</h1>
+          <div class="topbar-left">
+            <h1 class="page-title" id="pageTitle">Templates</h1>
+            <span class="step-indicator" id="stepIndicator">Stap 1 van 4</span>
+          </div>
           <div class="topbar-actions">
             <button class="btn-icon" id="themeToggle" type="button" title="Thema wisselen">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -67,23 +70,47 @@
           <!-- Stepper -->
           <div class="stepper">
             <div class="stepper-step active" data-step="templates">
-              <div class="stepper-circle">1</div>
-              <div class="stepper-label">Template</div>
+              <div class="stepper-circle">
+                <span class="stepper-number">1</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Template</div>
+                <div class="stepper-desc">Kies een uiting</div>
+              </div>
             </div>
-            <div class="stepper-line"></div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
             <div class="stepper-step" data-step="bronnen">
-              <div class="stepper-circle">2</div>
-              <div class="stepper-label">Bronnen</div>
+              <div class="stepper-circle">
+                <span class="stepper-number">2</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Bronnen</div>
+                <div class="stepper-desc">Upload bestanden</div>
+              </div>
             </div>
-            <div class="stepper-line"></div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
             <div class="stepper-step" data-step="preview">
-              <div class="stepper-circle">3</div>
-              <div class="stepper-label">Preview</div>
+              <div class="stepper-circle">
+                <span class="stepper-number">3</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Preview</div>
+                <div class="stepper-desc">Bekijk resultaat</div>
+              </div>
             </div>
-            <div class="stepper-line"></div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
             <div class="stepper-step" data-step="export">
-              <div class="stepper-circle">4</div>
-              <div class="stepper-label">Export</div>
+              <div class="stepper-circle">
+                <span class="stepper-number">4</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Export</div>
+                <div class="stepper-desc">Download bestand</div>
+              </div>
             </div>
           </div>
 
@@ -213,6 +240,6 @@
       </div>
     </div>
 
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
   </body>
 </html>

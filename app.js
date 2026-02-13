@@ -8,6 +8,7 @@ const pasteBox = document.getElementById('pasteBox');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 const pageTitle = document.getElementById('pageTitle');
+const stepIndicator = document.getElementById('stepIndicator');
 
 const sectionMap = {
   templates: { el: document.getElementById('sectionTemplates'), title: 'Templates' },
@@ -102,6 +103,11 @@ function switchSection(sectionKey) {
       line.classList.add('completed');
     }
   });
+
+  // Update step indicator
+  if (stepIndicator) {
+    stepIndicator.textContent = 'Stap ' + (newIndex + 1) + ' van 4';
+  }
 
   currentStepIndex = newIndex;
 }
