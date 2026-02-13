@@ -1,16 +1,20 @@
 const generateBtn = document.getElementById('generateBtn');
-const previewTitle = document.querySelector('.cover-title');
 const templateAccordion = document.getElementById('templateAccordion');
 const uploadDrop = document.getElementById('uploadDrop');
 const fileInput = document.getElementById('fileInput');
 const fileButton = document.getElementById('fileButton');
 const pasteButton = document.getElementById('pasteButton');
 const pasteBox = document.getElementById('pasteBox');
-const exportBtn = document.getElementById('exportBtn');
-const exportList = document.getElementById('exportList');
-const exportMenu = document.getElementById('exportMenu');
 const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
+const pageTitle = document.getElementById('pageTitle');
+
+const sectionMap = {
+  templates: { el: document.getElementById('sectionTemplates'), title: 'Templates' },
+  bronnen: { el: document.getElementById('sectionBronnen'), title: 'Bronnen' },
+  preview: { el: document.getElementById('sectionPreview'), title: 'Preview' },
+  export: { el: document.getElementById('sectionExport'), title: 'Exporteren' },
+};
 
 const templatesByCategory = [
   {
@@ -44,6 +48,36 @@ const templatesByCategory = [
 
 const sources = [];
 
+/* ── Navigation ── */
+function switchSection(sectionKey) {
+  document.querySelectorAll('.section').forEach(function (s) {
+    s.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(function (n) {
+    n.classList.remove('active');
+  });
+
+  var section = sectionMap[sectionKey];
+  if (section) {
+    section.el.classList.add('active');
+    pageTitle.textContent = section.title;
+  }
+
+  var navItem = document.querySelector('.nav-item[data-section="' + sectionKey + '"]');
+  if (navItem) {
+    navItem.classList.add('active');
+  }
+}
+
+document.querySelectorAll('.nav-item').forEach(function (item) {
+  item.addEventListener('click', function (e) {
+    e.preventDefault();
+    var section = this.getAttribute('data-section');
+    switchSection(section);
+  });
+});
+
+/* ── Helpers ── */
 function formatBytes(bytes) {
   if (!bytes && bytes !== 0) return '—';
   const units = ['B', 'KB', 'MB', 'GB'];
@@ -62,6 +96,7 @@ function getFileLabel(file) {
   return extension.substring(0, 4).toUpperCase() || 'FILE';
 }
 
+/* ── Sources ── */
 function renderSources() {
   sourceList.innerHTML = '';
   if (sources.length === 0) {
@@ -144,6 +179,7 @@ function addFiles(fileList) {
   renderSources();
 }
 
+/* ── Templates ── */
 function renderTemplates() {
   templateAccordion.innerHTML = '';
   templatesByCategory.forEach((group, groupIndex) => {
@@ -205,7 +241,6 @@ function renderTemplates() {
 
     updateAccordionAnimation(details);
   });
-  updatePreviewTitle('Nieuwe template');
 }
 
 function updateAccordionAnimation(details) {
@@ -225,29 +260,15 @@ function selectTemplate(button) {
     card.classList.remove('active');
   });
   button.classList.add('active');
-  updatePreviewTitle(button.dataset.template);
 }
 
-function updatePreviewTitle(templateName) {
-  if (!previewTitle) return;
-  previewTitle.textContent = `${templateName} ${
-    templateName === 'Projectupdate' || templateName === 'Resultaten' || templateName === 'Voorstel'
-      ? 'Presentatie'
-      : templateName === 'Proces' || templateName === 'Statistieken' || templateName === 'Tijdlijn'
-        ? 'Infographic'
-        : 'Rapportage'
-  }`;
-}
-
+/* ── Generate ── */
 generateBtn.addEventListener('click', () => {
-  exportMenu.classList.remove('hidden');
   generateBtn.classList.add('secondary');
   generateBtn.textContent = 'Genereer nogmaals';
-  setTimeout(() => {
-    generateBtn.textContent = 'Genereer nogmaals';
-  }, 900);
 });
 
+/* ── File Upload ── */
 fileButton.addEventListener('click', () => {
   fileInput.click();
 });
@@ -263,16 +284,6 @@ pasteButton.addEventListener('click', () => {
 uploadDrop.addEventListener('click', (event) => {
   if (event.target !== fileButton && event.target !== pasteButton) {
     fileInput.click();
-  }
-});
-
-exportBtn.addEventListener('click', () => {
-  exportList.classList.toggle('open');
-});
-
-document.addEventListener('click', (event) => {
-  if (!exportBtn.contains(event.target) && !exportList.contains(event.target)) {
-    exportList.classList.remove('open');
   }
 });
 
@@ -305,5 +316,6 @@ uploadDrop.addEventListener('drop', (event) => {
   }
 });
 
+/* ── Init ── */
 renderTemplates();
 renderSources();

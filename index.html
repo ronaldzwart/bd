@@ -7,90 +7,167 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="page">
-      <header class="topbar">
-        <div class="brand">
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo">CG</div>
           <div>
-            <div class="brand-title">Content Generator</div>
-            <div class="brand-sub">Templates · Bronnen · Snelle output</div>
+            <div class="sidebar-title">Content Generator</div>
+            <div class="sidebar-sub">v1.0</div>
           </div>
         </div>
-      </header>
 
-      <main class="layout">
-        <section class="panel">
-          <h2>1. Soort digitale uiting</h2>
-          <p class="panel-sub">Kies een categorie en daarna een template.</p>
-          <div class="template-accordion" id="templateAccordion"></div>
-        </section>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-section="templates">
+            <span class="nav-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </span>
+            <span class="nav-text">
+              <span class="nav-label">Templates</span>
+              <span class="nav-desc">Kies een uiting</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="bronnen">
+            <span class="nav-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </span>
+            <span class="nav-text">
+              <span class="nav-label">Bronnen</span>
+              <span class="nav-desc">Upload bestanden</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="preview">
+            <span class="nav-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+            <span class="nav-text">
+              <span class="nav-label">Preview</span>
+              <span class="nav-desc">Bekijk resultaat</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="export">
+            <span class="nav-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </span>
+            <span class="nav-text">
+              <span class="nav-label">Exporteren</span>
+              <span class="nav-desc">PDF, DOCX, HTML</span>
+            </span>
+          </a>
+        </nav>
 
-        <section class="panel">
-          <h2>2. Voeg bronnen toe</h2>
-          <div class="upload">
-            <input id="fileInput" class="file-input" type="file" multiple />
-            <div class="upload-drop" id="uploadDrop">
-              <div>
-                <div class="upload-title">Sleep bestanden of klik om te uploaden</div>
-                <div class="upload-sub">PDF, DOCX, TXT, CSV, PNG, JPG</div>
-              </div>
-              <div class="upload-actions">
-                <button class="btn small" id="fileButton" type="button">Bestanden kiezen</button>
-                <button class="btn small ghost" id="pasteButton" type="button">Tekst plakken</button>
-              </div>
-            </div>
-            <div class="paste-box" id="pasteBox">
-              <label class="label">Tekst plakken</label>
-              <textarea class="textarea" placeholder="Plak hier notities, ruwe data of samenvattingen..."></textarea>
-            </div>
-            <div class="source-list" id="sourceList">
-              <div class="source-empty" id="sourceEmpty">
-                Nog geen bronnen toegevoegd. Upload bestanden om te starten.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel wide">
-          <div class="preview-header">
-            <div>
-              <h2>3. Preview bekijken</h2>
-              <p class="muted">Klik op tekst om direct aan te passen.</p>
-            </div>
-          </div>
-          <div class="preview" id="preview">
-            <div class="preview-empty">
-              Voeg content en een template toe om een eerste versie te genereren.
-            </div>
-          </div>
-          <div class="prompt-row">
-            <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
-            <button class="btn primary generate-btn" id="generateBtn" type="button">
-              Genereer document <span class="arrow">→</span>
-            </button>
-          </div>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <div>Templatebibliotheek v1</div>
-        <div class="footer-actions">
-          <div class="export-menu hidden" id="exportMenu">
-            <button class="btn primary" id="exportBtn" type="button">
-              Exporteren als <span class="caret">▾</span>
-            </button>
-            <div class="export-list" id="exportList">
-              <button type="button">PDF</button>
-              <button type="button">DOCX</button>
-              <button type="button">HTML</button>
-              <button type="button">PPTX</button>
-              <button type="button">PNG</button>
-              <button type="button">SVG</button>
-            </div>
-          </div>
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-text">Templatebibliotheek v1</div>
         </div>
-      </footer>
+      </aside>
+
+      <div class="main">
+        <header class="topbar">
+          <h1 class="page-title" id="pageTitle">Templates</h1>
+          <div class="topbar-actions">
+            <button class="btn-icon" id="themeToggle" type="button" title="Thema wisselen">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="content">
+          <!-- Section: Templates -->
+          <section class="section active" id="sectionTemplates">
+            <div class="section-header">
+              <h2>Soort digitale uiting</h2>
+              <p class="section-desc">Kies een categorie en daarna een template.</p>
+            </div>
+            <div class="template-accordion" id="templateAccordion"></div>
+          </section>
+
+          <!-- Section: Bronnen -->
+          <section class="section" id="sectionBronnen">
+            <div class="section-header">
+              <h2>Voeg bronnen toe</h2>
+              <p class="section-desc">Upload bestanden of plak tekst als bron voor je content.</p>
+            </div>
+            <div class="upload">
+              <input id="fileInput" class="file-input" type="file" multiple />
+              <div class="upload-drop" id="uploadDrop">
+                <div class="upload-icon-wrap">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div>
+                  <div class="upload-title">Sleep bestanden of klik om te uploaden</div>
+                  <div class="upload-sub">PDF, DOCX, TXT, CSV, PNG, JPG</div>
+                </div>
+                <div class="upload-actions">
+                  <button class="btn small" id="fileButton" type="button">Bestanden kiezen</button>
+                  <button class="btn small ghost" id="pasteButton" type="button">Tekst plakken</button>
+                </div>
+              </div>
+              <div class="paste-box" id="pasteBox">
+                <label class="label">Tekst plakken</label>
+                <textarea class="textarea" placeholder="Plak hier notities, ruwe data of samenvattingen..."></textarea>
+              </div>
+              <div class="source-list" id="sourceList">
+                <div class="source-empty" id="sourceEmpty">
+                  Nog geen bronnen toegevoegd. Upload bestanden om te starten.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section: Preview -->
+          <section class="section" id="sectionPreview">
+            <div class="section-header">
+              <h2>Preview bekijken</h2>
+              <p class="section-desc">Klik op tekst om direct aan te passen.</p>
+            </div>
+            <div class="preview" id="preview">
+              <div class="preview-empty">
+                Voeg bronnen en een template toe om een eerste versie te genereren.
+              </div>
+            </div>
+            <div class="prompt-row">
+              <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
+              <button class="btn primary generate-btn" id="generateBtn" type="button">
+                Genereer <span class="arrow">&#8594;</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Export -->
+          <section class="section" id="sectionExport">
+            <div class="section-header">
+              <h2>Exporteren</h2>
+              <p class="section-desc">Kies een formaat om je document te downloaden.</p>
+            </div>
+            <div class="export-grid" id="exportGrid">
+              <button class="export-card" type="button" data-format="pdf">
+                <span class="export-card-icon">PDF</span>
+                <span class="export-card-label">PDF Document</span>
+              </button>
+              <button class="export-card" type="button" data-format="docx">
+                <span class="export-card-icon">DOCX</span>
+                <span class="export-card-label">Word Document</span>
+              </button>
+              <button class="export-card" type="button" data-format="html">
+                <span class="export-card-icon">HTML</span>
+                <span class="export-card-label">Webpagina</span>
+              </button>
+              <button class="export-card" type="button" data-format="pptx">
+                <span class="export-card-icon">PPTX</span>
+                <span class="export-card-label">PowerPoint</span>
+              </button>
+              <button class="export-card" type="button" data-format="png">
+                <span class="export-card-icon">PNG</span>
+                <span class="export-card-label">Afbeelding</span>
+              </button>
+              <button class="export-card" type="button" data-format="svg">
+                <span class="export-card-icon">SVG</span>
+                <span class="export-card-label">Vector</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
     </div>
 
     <script src="app.js"></script>
