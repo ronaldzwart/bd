@@ -1104,42 +1104,70 @@ body {
   flex-direction: column;
 }
 
-/* Cover slide */
-.slide-cover .slide-body {
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 48px;
+/* Cover slide – Belastingdienst huisstijl */
+.slide-cover {
   background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-cover-vlak {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 57%;
+  background: #8FCAE7;
+  clip-path: polygon(
+    0% 0%,
+    95% 0%,
+    95% 30%,
+    100% 30%,
+    100% 88%,
+    50% 88%,
+    50% 100%,
+    0% 100%
+  );
+}
+
+.slide-cover-logo {
+  position: absolute;
+  top: 0;
+  left: 47.5%;
+  height: 17.2%;
+  z-index: 2;
+}
+
+.slide-cover-logo img,
+.slide-cover-logo svg {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.slide-cover-textblock {
+  position: absolute;
+  left: 4%;
+  top: 20%;
+  width: 44%;
+  color: #154273;
 }
 
 .slide-cover-title {
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+  font-weight: 400;
   font-size: 28px;
-  font-weight: 700;
-  color: #1e3a5f;
-  line-height: 1.2;
-  margin-bottom: 8px;
-  min-height: 1em;
-}
-
-.slide-cover-subtitle {
-  font-size: 16px;
-  color: #4a6fa5;
-  margin-bottom: 24px;
+  line-height: 1.15;
+  color: #154273;
   min-height: 1em;
 }
 
 .slide-cover-date {
-  font-size: 13px;
-  color: #8ba4c4;
+  margin-top: 14px;
+  font-size: 14px;
+  font-style: italic;
+  color: #154273;
   min-height: 1em;
-}
-
-.slide-cover-line {
-  width: 60px;
-  height: 3px;
-  background: #1e3a5f;
-  margin-bottom: 16px;
-  border-radius: 2px;
 }
 
 /* Content slide */

@@ -434,12 +434,13 @@ const slideTypePicker = document.getElementById('slideTypePicker');
 
 const LOGO_SVG = `<svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">Belastingdienst</text></svg>`;
 
+
 let slides = [];
 let currentSlide = 0;
 
 function createSlide(type, data) {
   const defaults = {
-    cover: { title: 'Titel van de presentatie', subtitle: 'Ondertitel of korte beschrijving', date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) },
+    cover: { title: 'Titel van de presentatie', date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) },
     content: { title: 'Onderwerp', items: ['Eerste punt van bespreking', 'Tweede punt met toelichting', 'Derde belangrijk punt', 'Vierde punt of conclusie'] },
     text: { title: 'Onderwerp', paragraph1: 'Hier kunt u een uitgebreide toelichting geven op het onderwerp. Deze tekst kan worden aangepast door erop te klikken.', paragraph2: 'Een tweede alinea met aanvullende informatie, context of achtergrond bij het onderwerp dat wordt gepresenteerd.' },
     'quote-right': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '\u2014 Naam Auteur, Functie' },
@@ -455,7 +456,14 @@ function renderSlideHTML(slide, editable) {
 
   switch (slide.type) {
     case 'cover':
-      return `<div class="slide-frame slide-cover">${header}<div class="slide-body"><div class="slide-cover-line"></div><div class="slide-cover-title" ${ce} data-field="title">${d.title}</div><div class="slide-cover-subtitle" ${ce} data-field="subtitle">${d.subtitle}</div><div class="slide-cover-date" ${ce} data-field="date">${d.date}</div></div></div>`;
+      return `<div class="slide-frame slide-cover">
+        <div class="slide-cover-vlak"></div>
+        <div class="slide-cover-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>
+        <div class="slide-cover-textblock">
+          <div class="slide-cover-title" ${ce} data-field="title">${d.title}</div>
+          <div class="slide-cover-date" ${ce} data-field="date">${d.date}</div>
+        </div>
+      </div>`;
     case 'content':
       const items = (d.items || []).map((item, i) => `<li ${ce} data-field="items" data-index="${i}">${item}</li>`).join('');
       return `<div class="slide-frame slide-content-slide">${header}<div class="slide-content-body"><div class="slide-content-left"><div class="slide-content-title" ${ce} data-field="title">${d.title}</div><ul class="slide-content-list">${items}</ul></div><div class="slide-content-right">Afbeelding</div></div></div>`;
@@ -606,7 +614,7 @@ Het JSON-formaat is:
   "slides": [
     {
       "type": "cover",
-      "data": { "title": "...", "subtitle": "...", "date": "..." }
+      "data": { "title": "...", "date": "..." }
     },
     {
       "type": "content",
