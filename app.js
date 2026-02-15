@@ -9,6 +9,9 @@ const sourceList = document.getElementById('sourceList');
 const sourceEmpty = document.getElementById('sourceEmpty');
 const pageTitle = document.getElementById('pageTitle');
 const stepIndicator = document.getElementById('stepIndicator');
+const generatingOverlay = document.getElementById('generatingOverlay');
+const generatingStatus = document.getElementById('generatingStatus');
+const generatingProgressBar = document.getElementById('generatingProgressBar');
 
 const sectionMap = {
   templates: { el: document.getElementById('sectionTemplates'), title: 'Templates' },
@@ -48,6 +51,62 @@ const templatesByCategory = [
 ];
 
 const sources = [];
+let isGenerating = false;
+let hasGenerated = false;
+
+/* ── API Key Management ── */
+const apiKeyDialog = document.getElementById('apiKeyDialog');
+const apiKeyInput = document.getElementById('apiKeyInput');
+const apiKeyBtn = document.getElementById('apiKeyBtn');
+const apiKeySave = document.getElementById('apiKeySave');
+const apiKeyCancel = document.getElementById('apiKeyCancel');
+const apiKeyDialogClose = document.getElementById('apiKeyDialogClose');
+
+function getApiKey() {
+  return localStorage.getItem('cg_api_key') || '';
+}
+
+function setApiKey(key) {
+  localStorage.setItem('cg_api_key', key);
+  updateApiKeyIndicator();
+}
+
+function updateApiKeyIndicator() {
+  if (getApiKey()) {
+    apiKeyBtn.classList.add('has-key');
+  } else {
+    apiKeyBtn.classList.remove('has-key');
+  }
+}
+
+function openApiKeyDialog() {
+  apiKeyInput.value = getApiKey();
+  apiKeyDialog.classList.add('open');
+  apiKeyInput.focus();
+}
+
+function closeApiKeyDialog() {
+  apiKeyDialog.classList.remove('open');
+}
+
+apiKeyBtn.addEventListener('click', openApiKeyDialog);
+apiKeySave.addEventListener('click', function () {
+  setApiKey(apiKeyInput.value.trim());
+  closeApiKeyDialog();
+});
+apiKeyCancel.addEventListener('click', closeApiKeyDialog);
+apiKeyDialogClose.addEventListener('click', closeApiKeyDialog);
+apiKeyDialog.addEventListener('click', function (e) {
+  if (e.target === apiKeyDialog) closeApiKeyDialog();
+});
+apiKeyInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    setApiKey(apiKeyInput.value.trim());
+    closeApiKeyDialog();
+  }
+});
+
+updateApiKeyIndicator();
 
 /* ── Navigation ── */
 const stepOrder = ['templates', 'bronnen', 'preview', 'export'];
@@ -110,6 +169,11 @@ function switchSection(sectionKey) {
   }
 
   currentStepIndex = newIndex;
+
+  // Auto-generate when navigating to preview
+  if (sectionKey === 'preview' && !hasGenerated && !isGenerating) {
+    startGeneration();
+  }
 }
 
 // Sidebar nav clicks
@@ -148,7 +212,7 @@ document.querySelectorAll('.prev-btn').forEach(function (btn) {
 
 /* ── Helpers ── */
 function formatBytes(bytes) {
-  if (!bytes && bytes !== 0) return '—';
+  if (!bytes && bytes !== 0) return '\u2014';
   const units = ['B', 'KB', 'MB', 'GB'];
   let value = bytes;
   let unitIndex = 0;
@@ -193,7 +257,7 @@ function renderSources() {
     title.textContent = source.name;
     const sub = document.createElement('div');
     sub.className = 'source-sub';
-    sub.textContent = `${source.type || 'Bestand'} · ${formatBytes(source.size)}`;
+    sub.textContent = `${source.type || 'Bestand'} \u00B7 ${formatBytes(source.size)}`;
     info.appendChild(title);
     info.appendChild(sub);
 
@@ -221,6 +285,7 @@ function renderSources() {
       if (index !== -1) {
         sources.splice(index, 1);
         renderSources();
+        hasGenerated = false;
       }
     });
 
@@ -232,9 +297,28 @@ function renderSources() {
   });
 }
 
-function addFiles(fileList) {
-  Array.from(fileList).forEach((file) => {
+function readFileContent(file) {
+  return new Promise((resolve) => {
+    const textTypes = ['text/', 'application/json', 'application/xml', 'application/csv'];
+    const textExtensions = ['.txt', '.csv', '.md', '.json', '.xml', '.html', '.htm', '.log'];
+    const isText = textTypes.some(t => file.type.startsWith(t)) ||
+                   textExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+
+    if (isText) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsText(file);
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+async function addFiles(fileList) {
+  for (const file of Array.from(fileList)) {
     const id = `${file.name}-${file.size}-${file.lastModified}-${Math.random().toString(16).slice(2)}`;
+    const content = await readFileContent(file);
     const source = {
       id,
       name: file.name,
@@ -242,9 +326,11 @@ function addFiles(fileList) {
       type: file.type ? file.type.split('/')[1]?.toUpperCase() : 'Bestand',
       label: getFileLabel(file),
       previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      content: content,
     };
     sources.unshift(source);
-  });
+  }
+  hasGenerated = false;
   renderSources();
 }
 
@@ -262,7 +348,7 @@ function renderTemplates() {
     summaryNote.textContent = `${group.templates.length + 1} templates`;
     const summaryChevron = document.createElement('span');
     summaryChevron.className = 'chevron';
-    summaryChevron.textContent = '⌄';
+    summaryChevron.textContent = '\u2304';
     summary.appendChild(summaryNote);
     summary.appendChild(summaryChevron);
     details.appendChild(summary);
@@ -329,6 +415,12 @@ function selectTemplate(button) {
     card.classList.remove('active');
   });
   button.classList.add('active');
+  hasGenerated = false;
+}
+
+function getSelectedTemplate() {
+  const active = document.querySelector('.template-card.active');
+  return active ? active.dataset.template : 'Projectupdate';
 }
 
 /* ── Slides ── */
@@ -350,8 +442,8 @@ function createSlide(type, data) {
     cover: { title: 'Titel van de presentatie', subtitle: 'Ondertitel of korte beschrijving', date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) },
     content: { title: 'Onderwerp', items: ['Eerste punt van bespreking', 'Tweede punt met toelichting', 'Derde belangrijk punt', 'Vierde punt of conclusie'] },
     text: { title: 'Onderwerp', paragraph1: 'Hier kunt u een uitgebreide toelichting geven op het onderwerp. Deze tekst kan worden aangepast door erop te klikken.', paragraph2: 'Een tweede alinea met aanvullende informatie, context of achtergrond bij het onderwerp dat wordt gepresenteerd.' },
-    'quote-right': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '— Naam Auteur, Functie' },
-    'quote-left': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '— Naam Auteur, Functie' },
+    'quote-right': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '\u2014 Naam Auteur, Functie' },
+    'quote-left': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '\u2014 Naam Auteur, Functie' },
   };
   return { type, data: data || { ...defaults[type] }, id: Date.now() + Math.random() };
 }
@@ -428,7 +520,6 @@ function renderThumbs() {
     const inner = document.createElement('div');
     inner.className = 'slide-thumb-inner';
     inner.innerHTML = renderSlideHTML(slide, false);
-    // Scale down the content
     const scale = 0.18;
     inner.style.transform = `scale(${scale})`;
     inner.style.width = (1 / scale * 100) + '%';
@@ -483,19 +574,237 @@ document.querySelectorAll('.slide-type-option').forEach(btn => {
   });
 });
 
-// Init slides when preview section becomes active
-const origSwitchSection = switchSection;
-switchSection = function(sectionKey) {
-  origSwitchSection(sectionKey);
-  if (sectionKey === 'preview' && slides.length === 0) {
-    initSlides();
-  }
-};
+/* ── Generation via Claude API ── */
+function getSourcesText() {
+  let text = '';
+  sources.forEach((source, i) => {
+    text += `\n--- Bron ${i + 1}: ${source.name} ---\n`;
+    if (source.content) {
+      // Limit to 8000 chars per source to stay within token limits
+      const trimmed = source.content.length > 8000
+        ? source.content.substring(0, 8000) + '\n[... ingekort ...]'
+        : source.content;
+      text += trimmed + '\n';
+    } else {
+      text += `(Bestandstype: ${source.type}, ${formatBytes(source.size)} - inhoud niet leesbaar als tekst)\n`;
+    }
+  });
+  return text;
+}
 
-/* ── Generate ── */
+function buildPrompt() {
+  const templateName = getSelectedTemplate();
+  const sourcesText = getSourcesText();
+  const userPrompt = document.querySelector('.prompt-row .input').value.trim();
+
+  const system = `Je bent een presentatie-generator. Je maakt professionele slide-presentaties op basis van bronmateriaal.
+
+Je MOET antwoorden met ALLEEN valid JSON, geen markdown, geen uitleg, geen tekst ervoor of erna.
+
+Het JSON-formaat is:
+{
+  "slides": [
+    {
+      "type": "cover",
+      "data": { "title": "...", "subtitle": "...", "date": "..." }
+    },
+    {
+      "type": "content",
+      "data": { "title": "...", "items": ["...", "...", "...", "..."] }
+    },
+    {
+      "type": "text",
+      "data": { "title": "...", "paragraph1": "...", "paragraph2": "..." }
+    },
+    {
+      "type": "quote-right",
+      "data": { "quote": "...", "author": "— Naam, Functie" }
+    }
+  ]
+}
+
+Beschikbare slide types: cover, content, text, quote-right, quote-left
+- De eerste slide MOET type "cover" zijn
+- Genereer 5-8 slides
+- content slides hebben 3-5 items
+- Schrijf in het Nederlands
+- Maak de content professioneel en zakelijk
+- Gebruik de bronnen als basis voor de inhoud`;
+
+  let userMessage = `Template type: ${templateName}\n`;
+  if (userPrompt) {
+    userMessage += `\nAanvullende instructie: ${userPrompt}\n`;
+  }
+  if (sources.length > 0) {
+    userMessage += `\nBronmateriaal:\n${sourcesText}`;
+  } else {
+    userMessage += `\nEr zijn geen bronnen toegevoegd. Genereer een voorbeeld-presentatie passend bij het template type.`;
+  }
+  userMessage += `\n\nGenereer nu de presentatie als JSON.`;
+
+  return { system, userMessage };
+}
+
+async function callClaudeAPI(system, userMessage) {
+  const apiKey = getApiKey();
+  const proxyUrl = window.location.origin + '/proxy.php';
+
+  const response = await fetch(proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      api_key: apiKey,
+      system: system,
+      messages: [{ role: 'user', content: userMessage }],
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 4096,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      throw new Error('Ongeldige API key. Controleer je key via het sleutel-icoon rechtsboven.');
+    }
+    throw new Error(errorData.error?.message || errorData.error || `API fout (${response.status})`);
+  }
+
+  const data = await response.json();
+
+  // Extract text from Claude response
+  const textBlock = data.content?.find(b => b.type === 'text');
+  if (!textBlock) {
+    throw new Error('Geen tekst ontvangen van de API.');
+  }
+
+  return textBlock.text;
+}
+
+function parseSlideJSON(text) {
+  // Try to extract JSON from the response
+  let jsonStr = text.trim();
+
+  // Remove markdown code fences if present
+  const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (jsonMatch) {
+    jsonStr = jsonMatch[1].trim();
+  }
+
+  const parsed = JSON.parse(jsonStr);
+  if (!parsed.slides || !Array.isArray(parsed.slides)) {
+    throw new Error('Ongeldig response formaat: geen slides array gevonden.');
+  }
+
+  return parsed.slides;
+}
+
+function showOverlay(show) {
+  if (show) {
+    generatingOverlay.classList.add('active');
+  } else {
+    generatingOverlay.classList.remove('active');
+  }
+}
+
+function updateProgress(percent, status) {
+  generatingProgressBar.style.width = percent + '%';
+  if (status) generatingStatus.textContent = status;
+}
+
+function showOverlayError(message) {
+  const existing = generatingOverlay.querySelector('.generating-error');
+  if (existing) existing.remove();
+
+  const spinner = generatingOverlay.querySelector('.generating-spinner');
+  if (spinner) spinner.style.display = 'none';
+
+  generatingOverlay.querySelector('.generating-title').textContent = 'Genereren mislukt';
+
+  const errorEl = document.createElement('div');
+  errorEl.className = 'generating-error';
+  errorEl.textContent = message;
+
+  const retryBtn = document.createElement('button');
+  retryBtn.className = 'btn primary';
+  retryBtn.textContent = 'Opnieuw proberen';
+  retryBtn.style.marginTop = '12px';
+  retryBtn.addEventListener('click', () => {
+    startGeneration();
+  });
+
+  const content = generatingOverlay.querySelector('.generating-content');
+  content.appendChild(errorEl);
+  content.appendChild(retryBtn);
+}
+
+function resetOverlay() {
+  const spinner = generatingOverlay.querySelector('.generating-spinner');
+  if (spinner) spinner.style.display = '';
+  generatingOverlay.querySelector('.generating-title').textContent = 'Presentatie genereren...';
+  const existing = generatingOverlay.querySelector('.generating-error');
+  if (existing) existing.remove();
+  const retryBtn = generatingOverlay.querySelector('.btn.primary');
+  if (retryBtn && retryBtn.textContent === 'Opnieuw proberen') retryBtn.remove();
+  updateProgress(0, 'Bronnen analyseren');
+}
+
+async function startGeneration() {
+  if (isGenerating) return;
+
+  // Check API key
+  if (!getApiKey()) {
+    openApiKeyDialog();
+    return;
+  }
+
+  isGenerating = true;
+  resetOverlay();
+  showOverlay(true);
+
+  try {
+    updateProgress(15, 'Bronnen analyseren...');
+    const { system, userMessage } = buildPrompt();
+
+    updateProgress(30, 'Presentatie genereren via Claude...');
+    const responseText = await callClaudeAPI(system, userMessage);
+
+    updateProgress(70, 'Slides opbouwen...');
+    const slideData = parseSlideJSON(responseText);
+
+    updateProgress(90, 'Presentatie laden...');
+
+    // Build slides from API response
+    slides = slideData.map(s => {
+      const validTypes = ['cover', 'content', 'text', 'quote-right', 'quote-left'];
+      const type = validTypes.includes(s.type) ? s.type : 'text';
+      return createSlide(type, s.data);
+    });
+
+    if (slides.length === 0) {
+      slides = [createSlide('cover')];
+    }
+
+    currentSlide = 0;
+    updateProgress(100, 'Klaar!');
+
+    // Short delay to show 100% before hiding overlay
+    await new Promise(r => setTimeout(r, 500));
+
+    showOverlay(false);
+    hasGenerated = true;
+    renderCurrentSlide();
+    renderThumbs();
+  } catch (err) {
+    showOverlayError(err.message);
+  } finally {
+    isGenerating = false;
+  }
+}
+
+/* ── Generate button ── */
 generateBtn.addEventListener('click', () => {
-  generateBtn.classList.add('secondary');
-  generateBtn.textContent = 'Genereer nogmaals';
+  hasGenerated = false;
+  startGeneration();
 });
 
 /* ── File Upload ── */
@@ -508,6 +817,30 @@ pasteButton.addEventListener('click', () => {
   if (pasteBox.classList.contains('active')) {
     const textarea = pasteBox.querySelector('textarea');
     textarea.focus();
+  }
+});
+
+// Save pasted text as source
+pasteBox.querySelector('textarea').addEventListener('blur', function () {
+  const text = this.value.trim();
+  if (text) {
+    const existing = sources.find(s => s.id === 'pasted-text');
+    if (existing) {
+      existing.content = text;
+      existing.size = new Blob([text]).size;
+    } else {
+      sources.unshift({
+        id: 'pasted-text',
+        name: 'Geplakte tekst',
+        size: new Blob([text]).size,
+        type: 'TXT',
+        label: 'TXT',
+        previewUrl: null,
+        content: text,
+      });
+    }
+    hasGenerated = false;
+    renderSources();
   }
 });
 
