@@ -176,9 +176,36 @@
               <h2>Preview bekijken</h2>
               <p class="section-desc">Klik op tekst om direct aan te passen.</p>
             </div>
-            <div class="preview" id="preview">
-              <div class="preview-empty">
-                Voeg bronnen en een template toe om een eerste versie te genereren.
+            <div class="slide-viewer" id="slideViewer">
+              <div class="slide-main">
+                <div class="slide-canvas" id="slideCanvas"></div>
+                <div class="slide-controls">
+                  <button class="btn small ghost" id="prevSlide" type="button">&#8592; Vorige</button>
+                  <span class="slide-counter" id="slideCounter">Slide 1 van 1</span>
+                  <button class="btn small ghost" id="nextSlide" type="button">Volgende &#8594;</button>
+                </div>
+              </div>
+              <div class="slide-sidebar">
+                <div class="slide-sidebar-header">
+                  <span>Slides</span>
+                  <button class="btn small" id="addSlideBtn" type="button">+ Toevoegen</button>
+                </div>
+                <div class="slide-thumbs" id="slideThumbs"></div>
+                <div class="slide-type-picker" id="slideTypePicker">
+                  <div class="slide-type-picker-title">Kies slide type:</div>
+                  <button class="slide-type-option" data-type="content" type="button">
+                    <span class="slide-type-icon">&#9776;</span> Content
+                  </button>
+                  <button class="slide-type-option" data-type="text" type="button">
+                    <span class="slide-type-icon">&#182;</span> Tekst
+                  </button>
+                  <button class="slide-type-option" data-type="quote-right" type="button">
+                    <span class="slide-type-icon">&#10078;</span> Quote rechts
+                  </button>
+                  <button class="slide-type-option" data-type="quote-left" type="button">
+                    <span class="slide-type-icon">&#10077;</span> Quote links
+                  </button>
+                </div>
               </div>
             </div>
             <div class="prompt-row">

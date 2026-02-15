@@ -331,6 +331,167 @@ function selectTemplate(button) {
   button.classList.add('active');
 }
 
+/* ── Slides ── */
+const slideCanvas = document.getElementById('slideCanvas');
+const slideThumbs = document.getElementById('slideThumbs');
+const slideCounter = document.getElementById('slideCounter');
+const prevSlideBtn = document.getElementById('prevSlide');
+const nextSlideBtn = document.getElementById('nextSlide');
+const addSlideBtn = document.getElementById('addSlideBtn');
+const slideTypePicker = document.getElementById('slideTypePicker');
+
+const LOGO_SVG = `<svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">Belastingdienst</text></svg>`;
+
+let slides = [];
+let currentSlide = 0;
+
+function createSlide(type, data) {
+  const defaults = {
+    cover: { title: 'Titel van de presentatie', subtitle: 'Ondertitel of korte beschrijving', date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) },
+    content: { title: 'Onderwerp', items: ['Eerste punt van bespreking', 'Tweede punt met toelichting', 'Derde belangrijk punt', 'Vierde punt of conclusie'] },
+    text: { title: 'Onderwerp', paragraph1: 'Hier kunt u een uitgebreide toelichting geven op het onderwerp. Deze tekst kan worden aangepast door erop te klikken.', paragraph2: 'Een tweede alinea met aanvullende informatie, context of achtergrond bij het onderwerp dat wordt gepresenteerd.' },
+    'quote-right': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '— Naam Auteur, Functie' },
+    'quote-left': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '— Naam Auteur, Functie' },
+  };
+  return { type, data: data || { ...defaults[type] }, id: Date.now() + Math.random() };
+}
+
+function renderSlideHTML(slide, editable) {
+  const ce = editable ? 'contenteditable="true"' : '';
+  const d = slide.data;
+  const header = `<div class="slide-header-bar"><div class="slide-logo">${LOGO_SVG}</div></div>`;
+
+  switch (slide.type) {
+    case 'cover':
+      return `<div class="slide-frame slide-cover">${header}<div class="slide-body"><div class="slide-cover-line"></div><div class="slide-cover-title" ${ce} data-field="title">${d.title}</div><div class="slide-cover-subtitle" ${ce} data-field="subtitle">${d.subtitle}</div><div class="slide-cover-date" ${ce} data-field="date">${d.date}</div></div></div>`;
+    case 'content':
+      const items = (d.items || []).map((item, i) => `<li ${ce} data-field="items" data-index="${i}">${item}</li>`).join('');
+      return `<div class="slide-frame slide-content-slide">${header}<div class="slide-content-body"><div class="slide-content-left"><div class="slide-content-title" ${ce} data-field="title">${d.title}</div><ul class="slide-content-list">${items}</ul></div><div class="slide-content-right">Afbeelding</div></div></div>`;
+    case 'text':
+      return `<div class="slide-frame slide-text-slide">${header}<div class="slide-text-body"><div class="slide-text-title" ${ce} data-field="title">${d.title}</div><div class="slide-text-paragraph" ${ce} data-field="paragraph1">${d.paragraph1}</div><div class="slide-text-paragraph" ${ce} data-field="paragraph2">${d.paragraph2}</div></div></div>`;
+    case 'quote-right':
+      return `<div class="slide-frame slide-quote-slide">${header}<div class="slide-quote-body"><div class="slide-quote-image">Afbeelding</div><div class="slide-quote-content"><div class="slide-quote-mark">\u201C</div><div class="slide-quote-text" ${ce} data-field="quote">${d.quote}</div><div class="slide-quote-author" ${ce} data-field="author">${d.author}</div></div></div></div>`;
+    case 'quote-left':
+      return `<div class="slide-frame slide-quote-slide">${header}<div class="slide-quote-body"><div class="slide-quote-content"><div class="slide-quote-mark">\u201C</div><div class="slide-quote-text" ${ce} data-field="quote">${d.quote}</div><div class="slide-quote-author" ${ce} data-field="author">${d.author}</div></div><div class="slide-quote-image">Afbeelding</div></div></div>`;
+    default:
+      return '';
+  }
+}
+
+function renderCurrentSlide() {
+  if (slides.length === 0) return;
+  const slide = slides[currentSlide];
+  slideCanvas.innerHTML = renderSlideHTML(slide, true);
+  slideCounter.textContent = `Slide ${currentSlide + 1} van ${slides.length}`;
+
+  // Bind editable fields
+  slideCanvas.querySelectorAll('[contenteditable]').forEach(el => {
+    el.addEventListener('blur', () => {
+      const field = el.getAttribute('data-field');
+      const index = el.getAttribute('data-index');
+      if (field === 'items' && index !== null) {
+        slide.data.items[parseInt(index)] = el.textContent;
+      } else {
+        slide.data[field] = el.textContent;
+      }
+      renderThumbs();
+    });
+  });
+}
+
+function renderThumbs() {
+  slideThumbs.innerHTML = '';
+  slides.forEach((slide, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'slide-thumb' + (i === currentSlide ? ' active' : '');
+
+    const num = document.createElement('span');
+    num.className = 'slide-thumb-number';
+    num.textContent = i + 1;
+    thumb.appendChild(num);
+
+    if (i > 0) {
+      const del = document.createElement('button');
+      del.className = 'slide-thumb-delete';
+      del.type = 'button';
+      del.textContent = '\u00D7';
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        slides.splice(i, 1);
+        if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+        renderCurrentSlide();
+        renderThumbs();
+      });
+      thumb.appendChild(del);
+    }
+
+    const inner = document.createElement('div');
+    inner.className = 'slide-thumb-inner';
+    inner.innerHTML = renderSlideHTML(slide, false);
+    // Scale down the content
+    const scale = 0.18;
+    inner.style.transform = `scale(${scale})`;
+    inner.style.width = (1 / scale * 100) + '%';
+    inner.style.height = (1 / scale * 100) + '%';
+    thumb.appendChild(inner);
+
+    thumb.addEventListener('click', () => {
+      currentSlide = i;
+      renderCurrentSlide();
+      renderThumbs();
+    });
+
+    slideThumbs.appendChild(thumb);
+  });
+}
+
+function initSlides() {
+  slides = [createSlide('cover'), createSlide('content'), createSlide('text')];
+  currentSlide = 0;
+  renderCurrentSlide();
+  renderThumbs();
+}
+
+prevSlideBtn.addEventListener('click', () => {
+  if (currentSlide > 0) {
+    currentSlide--;
+    renderCurrentSlide();
+    renderThumbs();
+  }
+});
+
+nextSlideBtn.addEventListener('click', () => {
+  if (currentSlide < slides.length - 1) {
+    currentSlide++;
+    renderCurrentSlide();
+    renderThumbs();
+  }
+});
+
+addSlideBtn.addEventListener('click', () => {
+  slideTypePicker.classList.toggle('open');
+});
+
+document.querySelectorAll('.slide-type-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.getAttribute('data-type');
+    slides.push(createSlide(type));
+    currentSlide = slides.length - 1;
+    renderCurrentSlide();
+    renderThumbs();
+    slideTypePicker.classList.remove('open');
+  });
+});
+
+// Init slides when preview section becomes active
+const origSwitchSection = switchSection;
+switchSection = function(sectionKey) {
+  origSwitchSection(sectionKey);
+  if (sectionKey === 'preview' && slides.length === 0) {
+    initSlides();
+  }
+};
+
 /* ── Generate ── */
 generateBtn.addEventListener('click', () => {
   generateBtn.classList.add('secondary');
