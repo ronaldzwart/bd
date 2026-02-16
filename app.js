@@ -478,10 +478,73 @@ function renderSlideHTML(slide, editable) {
   }
 }
 
+/* ── Belastingdienst Huisstijl ── */
+function isBDTemplate() {
+  return getSelectedTemplate() === 'Projectupdate';
+}
+
+function renderBDSlideHTML(slide, editable) {
+  const ce = editable ? 'contenteditable="true"' : '';
+  const d = slide.data;
+  const logo = '<div class="bd-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>';
+
+  switch (slide.type) {
+    case 'cover':
+      return '<div class="slide-frame slide-cover">' +
+        '<div class="slide-cover-vlak"></div>' +
+        '<div class="slide-cover-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>' +
+        '<div class="slide-cover-textblock">' +
+          '<div class="slide-cover-title" ' + ce + ' data-field="title">' + d.title + '</div>' +
+          '<div class="slide-cover-date" ' + ce + ' data-field="date">' + d.date + '</div>' +
+        '</div></div>';
+    case 'content':
+      return '<div class="slide-frame bd-content-slide">' + logo +
+        '<div class="bd-right-block"></div>' +
+        '<div class="bd-left-area">' +
+          '<div class="bd-section-label" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + d.title + '</h2>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="body">' + (d.body || (d.items || []).join('. ')) + '</div>' +
+        '</div>' +
+        '<div class="bd-illustration-placeholder">Illustratie of<br>visualisatie</div>' +
+        '</div>';
+    case 'text':
+      return '<div class="slide-frame bd-text-slide">' + logo +
+        '<div class="bd-text-area">' +
+          '<div class="bd-section-label" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + d.title + '</h2>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="paragraph1">' + d.paragraph1 + '</div>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="paragraph2">' + d.paragraph2 + '</div>' +
+        '</div></div>';
+    case 'quote-right':
+      return '<div class="slide-frame bd-quote-right">' + logo +
+        '<div class="bd-section-label bd-section-abs" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+        '<div class="bd-blue-block-l"></div>' +
+        '<h2 class="bd-quote-title" ' + ce + ' data-field="title">' + (d.title || d.quote) + '</h2>' +
+        '<div class="bd-quote-area">' +
+          '<div class="bd-quote-text" ' + ce + ' data-field="quote">' + d.quote + '</div>' +
+          '<div class="bd-quote-source" ' + ce + ' data-field="author">' + d.author + '</div>' +
+        '</div>' +
+        '<div class="bd-photo-right"><div class="bd-photo-placeholder">Foto</div></div>' +
+        '</div>';
+    case 'quote-left':
+      return '<div class="slide-frame bd-quote-left">' + logo +
+        '<div class="bd-photo-left"><div class="bd-photo-placeholder">Foto</div></div>' +
+        '<div class="bd-right-block"></div>' +
+        '<div class="bd-ql-text-area">' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + (d.title || d.quote) + '</h2>' +
+          '<div class="bd-slide-subtitle" ' + ce + ' data-field="subtitle">' + (d.subtitle || d.quote) + '</div>' +
+          '<div class="bd-quote-source" ' + ce + ' data-field="author">' + d.author + '</div>' +
+        '</div>' +
+        '</div>';
+    default:
+      return '';
+  }
+}
+
 function renderCurrentSlide() {
   if (slides.length === 0) return;
   const slide = slides[currentSlide];
-  slideCanvas.innerHTML = renderSlideHTML(slide, true);
+  slideCanvas.innerHTML = isBDTemplate() ? renderBDSlideHTML(slide, true) : renderSlideHTML(slide, true);
   slideCounter.textContent = `Slide ${currentSlide + 1} van ${slides.length}`;
 
   // Bind editable fields
@@ -527,7 +590,7 @@ function renderThumbs() {
 
     const inner = document.createElement('div');
     inner.className = 'slide-thumb-inner';
-    inner.innerHTML = renderSlideHTML(slide, false);
+    inner.innerHTML = isBDTemplate() ? renderBDSlideHTML(slide, false) : renderSlideHTML(slide, false);
     const scale = 0.18;
     inner.style.transform = `scale(${scale})`;
     inner.style.width = (1 / scale * 100) + '%';
@@ -604,8 +667,35 @@ function buildPrompt() {
   const templateName = getSelectedTemplate();
   const sourcesText = getSourcesText();
   const userPrompt = document.querySelector('.prompt-row .input').value.trim();
+  const bd = isBDTemplate();
 
-  const system = `Je bent een presentatie-generator. Je maakt professionele slide-presentaties op basis van bronmateriaal.
+  const bdSystem = `Je bent een presentatie-generator voor de Belastingdienst (Rijkshuisstijl).
+Je maakt professionele slide-presentaties op basis van bronmateriaal.
+
+Je MOET antwoorden met ALLEEN valid JSON, geen markdown, geen uitleg, geen tekst ervoor of erna.
+
+Het JSON-formaat is:
+{
+  "slides": [
+    { "type": "cover", "data": { "title": "...", "date": "..." } },
+    { "type": "content", "data": { "section": "Sectienaam", "title": "...", "body": "Paragraaftekst met <strong>nadruk</strong> waar nodig." } },
+    { "type": "text", "data": { "section": "Sectienaam", "title": "...", "paragraph1": "...", "paragraph2": "..." } },
+    { "type": "quote-right", "data": { "section": "Sectienaam", "title": "Grote impactvolle stelling", "quote": "Onderbouwend citaat...", "author": "— Naam, Functie" } },
+    { "type": "quote-left", "data": { "section": "Sectienaam", "title": "Grote titel", "subtitle": "Ondertitel of toelichting", "author": "— Naam, Functie" } }
+  ]
+}
+
+Regels:
+- De eerste slide MOET type "cover" zijn
+- Genereer 6-10 slides
+- Schrijf in helder, zakelijk Nederlands
+- Houd slides beknopt: max 3-4 zinnen body-tekst per slide
+- Wissel af tussen slide-typen voor visuele variatie
+- Elk slide-type heeft een "section" veld (kort label, bijv. "Aanleiding", "Analyse", "Voorstel")
+- content slides: body is HTML-tekst (gebruik <strong> voor nadruk)
+- Gebruik de bronnen als basis voor de inhoud`;
+
+  const defaultSystem = `Je bent een presentatie-generator. Je maakt professionele slide-presentaties op basis van bronmateriaal.
 
 Je MOET antwoorden met ALLEEN valid JSON, geen markdown, geen uitleg, geen tekst ervoor of erna.
 
@@ -638,6 +728,8 @@ Beschikbare slide types: cover, content, text, quote-right, quote-left
 - Schrijf in het Nederlands
 - Maak de content professioneel en zakelijk
 - Gebruik de bronnen als basis voor de inhoud`;
+
+  const system = bd ? bdSystem : defaultSystem;
 
   let userMessage = `Template type: ${templateName}\n`;
   if (userPrompt) {
