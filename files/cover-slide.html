@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belastingdienst – Cover Template</title>
+<style>
+  :root{
+    --lintblauw:#154273;
+    --lichtblauw:#8FCAE7;
+    --wit:#FFFFFF;
+    --font-heading:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+    --font-body:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#d8d8d8;
+    font-family:var(--font-body);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+  }
+  .slide{
+    width:1122px;
+    height:794px;
+    background:var(--wit);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 6px 28px rgba(0,0,0,.15);
+  }
+
+  /* Lichtblauw vlak: L-vorm */
+  .covervlak{
+    position:absolute;
+    left:0;top:0;
+    width:50%;
+    height:57%;
+    background:var(--lichtblauw);
+    clip-path:polygon(
+      0%   0%,
+      95%  0%,
+      95%  30%,
+      100% 30%,
+      100% 88%,
+      50%  88%,
+      50%  100%,
+      0%   100%
+    );
+  }
+
+  /* Gecombineerd logo: Rijkswapen + "Belastingdienst" */
+  .logo{
+    position:absolute;
+    top:0;
+    left:47.5%;
+    height:17.2%;
+    z-index:2;
+  }
+  .logo img{
+    height:100%;
+    width:auto;
+    display:block;
+  }
+
+  /* Titel */
+  .textblock{
+    position:absolute;
+    left:4%;
+    top:20%;
+    width:44%;
+    color:var(--lintblauw);
+  }
+  .textblock h1{
+    font-family:var(--font-heading);
+    font-weight:400;
+    font-size:48px;
+    line-height:1.15;
+  }
+  .textblock .datum{
+    margin-top:24px;
+    font-size:20px;
+    font-style:italic;
+  }
+
+  @media print{
+    body{ background:none; padding:0; }
+    .slide{ box-shadow:none; page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="covervlak"></div>
+  <div class="logo">
+    <img src="Belastingdienst_logo.png" alt="Belastingdienst">
+  </div>
+  <div class="textblock">
+    <h1>Titel presentatie</h1>
+    <div class="datum">Datum</div>
+  </div>
+</div>
+</body>
+</html>

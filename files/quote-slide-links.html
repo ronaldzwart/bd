@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belastingdienst – Quote Slide (foto links)</title>
+<style>
+  :root{
+    --lintblauw:#154273;
+    --lichtblauw-bg:#DAE9F3;
+    --wit:#FFFFFF;
+    --tekst-donker:#1A1A1A;
+    --font-heading:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+    --font-body:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#d8d8d8;
+    font-family:var(--font-body);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+  }
+  .slide{
+    width:1122px;
+    height:794px;
+    background:var(--wit);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 6px 28px rgba(0,0,0,.15);
+  }
+
+  /* Logo */
+  .logo{
+    position:absolute;
+    top:0;
+    left:47.5%;
+    height:17.2%;
+    z-index:3;
+  }
+  .logo img{
+    height:100%;
+    width:auto;
+    display:block;
+  }
+
+  /* Sectietitel linksboven op foto */
+  .section-label{
+    position:absolute;
+    top:40px;
+    left:48px;
+    font-family:var(--font-heading);
+    font-size:15px;
+    font-weight:700;
+    color:var(--wit);
+    z-index:2;
+  }
+
+  /* Foto linkerhelft */
+  .photo-area{
+    position:absolute;
+    left:0;
+    top:0;
+    width:50%;
+    height:100%;
+    overflow:hidden;
+    z-index:0;
+  }
+  .photo-area img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .photo-placeholder{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#888;
+    font-size:15px;
+    background:linear-gradient(135deg,#a0a0a0 0%,#c8c8c8 100%);
+  }
+
+  /* Lichtblauw vlak rechts */
+  .right-block{
+    position:absolute;
+    right:0;
+    top:0;
+    width:50%;
+    height:100%;
+    background:var(--lichtblauw-bg);
+  }
+
+  /* Tekstgebied rechts */
+  .text-area{
+    position:absolute;
+    right:0;
+    top:0;
+    width:50%;
+    height:100%;
+    padding:100px 56px 56px 56px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    z-index:1;
+  }
+
+  .slide-title{
+    font-family:var(--font-heading);
+    font-size:44px;
+    font-weight:700;
+    color:var(--lintblauw);
+    line-height:1.15;
+  }
+
+  .slide-subtitle{
+    font-family:var(--font-body);
+    font-size:20px;
+    line-height:1.45;
+    color:var(--tekst-donker);
+    margin-top:8px;
+  }
+
+  .quote-source{
+    margin-top:auto;
+    font-family:var(--font-body);
+    font-size:16px;
+    color:var(--tekst-donker);
+    padding-top:32px;
+  }
+
+  @media print{
+    body{ background:none; padding:0; }
+    .slide{ box-shadow:none; page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <!-- Foto links -->
+  <div class="photo-area">
+    <!-- Vervang door <img src="foto.jpg" alt="..."> -->
+    <div class="photo-placeholder">Foto</div>
+  </div>
+
+  <!-- Sectietitel op foto -->
+  <div class="section-label">Sectietitel</div>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="Belastingdienst_logo.png" alt="Belastingdienst">
+  </div>
+
+  <!-- Lichtblauw vlak rechts -->
+  <div class="right-block"></div>
+
+  <!-- Tekst rechts -->
+  <div class="text-area">
+    <h2 class="slide-title">We moeten diensten ontwerpen, niet ze 'per ongeluk' laten gebeuren.</h2>
+    <div class="slide-subtitle">We moeten mensen helpen, zodat ze de dingen kunnen doen waar ze echt om geven.</div>
+    <div class="quote-source">– Bron, jaar (functie)</div>
+  </div>
+</div>
+
+</body>
+</html>

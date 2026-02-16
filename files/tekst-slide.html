@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belastingdienst – Tekst Slide</title>
+<style>
+  :root{
+    --lintblauw:#154273;
+    --wit:#FFFFFF;
+    --tekst-donker:#1A1A1A;
+    --font-heading:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+    --font-body:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#d8d8d8;
+    font-family:var(--font-body);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+  }
+  .slide{
+    width:1122px;
+    height:794px;
+    background:var(--wit);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 6px 28px rgba(0,0,0,.15);
+  }
+
+  /* Logo */
+  .logo{
+    position:absolute;
+    top:0;
+    left:47.5%;
+    height:17.2%;
+    z-index:2;
+  }
+  .logo img{
+    height:100%;
+    width:auto;
+    display:block;
+  }
+
+  /* Tekstgebied */
+  .text-area{
+    position:absolute;
+    left:0;top:0;
+    width:100%;
+    height:100%;
+    padding:72px 48px 48px 48px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .section-label{
+    font-family:var(--font-heading);
+    font-size:15px;
+    font-weight:700;
+    color:var(--lintblauw);
+  }
+
+  .slide-title{
+    font-family:var(--font-heading);
+    font-size:36px;
+    font-weight:700;
+    color:var(--lintblauw);
+    line-height:1.2;
+    margin-top:12px;
+    max-width:80%;
+  }
+
+  .slide-body{
+    font-family:var(--font-body);
+    font-size:19px;
+    line-height:1.55;
+    color:var(--tekst-donker);
+    margin-top:16px;
+    max-width:75%;
+  }
+  .slide-body strong{
+    font-weight:700;
+  }
+  .slide-body p + p{
+    margin-top:18px;
+  }
+
+  @media print{
+    body{ background:none; padding:0; }
+    .slide{ box-shadow:none; page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <!-- Logo -->
+  <div class="logo">
+    <img src="Belastingdienst_logo.png" alt="Belastingdienst">
+  </div>
+
+  <!-- Tekst -->
+  <div class="text-area">
+    <div class="section-label">Sectietitel</div>
+    <h2 class="slide-title">Titel van de slide</h2>
+    <div class="slide-body">
+      <p><strong>Eerste alinea met nadruk</strong> gevolgd door de rest van de paragraaftekst. Hier kunt u de inhoud van de slide beschrijven met alle relevante informatie.</p>
+      <p>Tweede alinea met aanvullende tekst. Vanuit de verschillende punten worden <strong>uitvoerbare verbeterinitiatieven</strong> ontworpen die met stakeholders worden gevalideerd en met de business geprioriteerd.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belastingdienst – Quote Slide</title>
+<style>
+  :root{
+    --lintblauw:#154273;
+    --lichtblauw-bg:#DAE9F3;
+    --wit:#FFFFFF;
+    --tekst-donker:#1A1A1A;
+    --font-heading:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+    --font-body:'RijksoverheidSansWebText','Calibri','Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#d8d8d8;
+    font-family:var(--font-body);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+  }
+  .slide{
+    width:1122px;
+    height:794px;
+    background:var(--wit);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 6px 28px rgba(0,0,0,.15);
+  }
+
+  /* Logo — zelfde als cover template */
+  .logo{
+    position:absolute;
+    top:0;
+    left:47.5%;
+    height:17.2%;
+    z-index:3;
+  }
+  .logo img{
+    height:100%;
+    width:auto;
+    display:block;
+  }
+
+  /* Sectietitel linksboven */
+  .section-label{
+    position:absolute;
+    top:40px;
+    left:48px;
+    font-family:var(--font-heading);
+    font-size:15px;
+    font-weight:700;
+    color:var(--lintblauw);
+    z-index:2;
+  }
+
+  /* Lichtblauw vlak — L-vorm links */
+  .blue-block{
+    position:absolute;
+    left:0;
+    top:80px;
+    width:48%;
+    height:58%;
+    background:var(--lichtblauw-bg);
+    clip-path:polygon(
+      0%   0%,
+      100% 0%,
+      100% 75%,
+      55%  75%,
+      55%  100%,
+      0%   100%
+    );
+    z-index:1;
+  }
+
+  /* Grote titel op het blauwe vlak */
+  .slide-title{
+    position:absolute;
+    left:48px;
+    top:120px;
+    width:42%;
+    font-family:var(--font-heading);
+    font-size:42px;
+    font-weight:400;
+    color:var(--lintblauw);
+    line-height:1.2;
+    z-index:2;
+  }
+
+  /* Quote tekst linksonder */
+  .quote-area{
+    position:absolute;
+    left:48px;
+    bottom:48px;
+    width:42%;
+    z-index:2;
+  }
+  .quote-text{
+    font-family:var(--font-body);
+    font-size:18px;
+    line-height:1.5;
+    color:var(--tekst-donker);
+  }
+  .quote-source{
+    margin-top:4px;
+    font-family:var(--font-body);
+    font-size:15px;
+    color:#555;
+  }
+
+  /* Foto rechts — volle hoogte */
+  .photo-area{
+    position:absolute;
+    right:0;
+    top:0;
+    width:50%;
+    height:100%;
+    background:#c0c0c0;
+    overflow:hidden;
+    z-index:0;
+  }
+  .photo-area img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .photo-placeholder{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#888;
+    font-size:15px;
+    background:linear-gradient(135deg,#b8b8b8 0%,#d0d0d0 100%);
+  }
+
+  @media print{
+    body{ background:none; padding:0; }
+    .slide{ box-shadow:none; page-break-after:always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <!-- Logo -->
+  <div class="logo">
+    <img src="Belastingdienst_logo.png" alt="Belastingdienst">
+  </div>
+
+  <!-- Sectietitel -->
+  <div class="section-label">Sectietitel</div>
+
+  <!-- Lichtblauw L-vlak -->
+  <div class="blue-block"></div>
+
+  <!-- Grote titel -->
+  <h2 class="slide-title">Een goede dienstverlening begint bij de mensen zelf</h2>
+
+  <!-- Quote onderaan links -->
+  <div class="quote-area">
+    <div class="quote-text">"Placeholder voor een quote of toelichting die de boodschap van de slide ondersteunt."</div>
+    <div class="quote-source">— Bron, jaar (functie)</div>
+  </div>
+
+  <!-- Foto rechterhelft -->
+  <div class="photo-area">
+    <!-- Vervang onderstaande div door <img src="foto.jpg" alt="..."> -->
+    <div class="photo-placeholder">Foto</div>
+  </div>
+</div>
+
+</body>
+</html>
