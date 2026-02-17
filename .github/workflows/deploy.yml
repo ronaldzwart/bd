@@ -1,4 +1,4 @@
-name: Deploy (test)
+name: Deploy
 
 on:
   push:
@@ -11,12 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Sync to test server via rsync
+      - name: Sync to server via rsync
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avzr --delete --exclude ".git*" --exclude ".github" --exclude "README*"
+          switches: -avzr --delete --exclude ".git*" --exclude ".github" --exclude "README*" --exclude "CLAUDE.md" --exclude "standalone.html"
           path: ./
-          remote_path: /home/public_html/test/
+          remote_path: /home/public_html/
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
