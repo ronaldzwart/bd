@@ -1,0 +1,3102 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Content Generator</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #f5f6fa;
+  --sidebar-bg: #1a1d2e;
+  --sidebar-text: #a0a3b5;
+  --sidebar-active: #ffffff;
+  --sidebar-accent: #6c5ce7;
+  --panel: #ffffff;
+  --ink: #1a1d2e;
+  --muted: #6b7280;
+  --accent: #6c5ce7;
+  --accent-hover: #5a4bd1;
+  --line: #e5e7eb;
+  --line-light: #f0f1f5;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --sidebar-width: 260px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── App Layout ── */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 24px;
+}
+
+.sidebar-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--sidebar-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+}
+
+.sidebar-sub {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--sidebar-text);
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: rgba(108, 92, 231, 0.15);
+  color: #fff;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--sidebar-accent);
+}
+
+.nav-step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--sidebar-text);
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .nav-step {
+  background: var(--sidebar-accent);
+  color: #fff;
+}
+
+.nav-item.completed .nav-step {
+  background: rgba(108, 92, 231, 0.3);
+  color: #fff;
+}
+
+.nav-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nav-label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.nav-desc {
+  font-size: 12px;
+  opacity: 0.6;
+  line-height: 1.3;
+}
+
+.sidebar-footer {
+  padding: 16px 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-footer-text {
+  font-size: 11px;
+  opacity: 0.4;
+}
+
+/* ── Main ── */
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.step-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(108, 92, 231, 0.08);
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.content {
+  flex: 1;
+  padding: 28px 32px;
+}
+
+/* ── Sections ── */
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ── Stepper ── */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 32px;
+  padding: 24px 32px;
+  background: var(--panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.stepper-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.stepper-step:hover {
+  background: var(--line-light);
+}
+
+.stepper-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--line-light);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--muted);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.stepper-check {
+  display: none;
+}
+
+.stepper-step.active .stepper-circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(108, 92, 231, 0.35);
+  transform: scale(1.1);
+}
+
+.stepper-step.completed .stepper-circle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.stepper-step.completed .stepper-number {
+  display: none;
+}
+
+.stepper-step.completed .stepper-check {
+  display: block;
+}
+
+.stepper-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stepper-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s ease;
+  line-height: 1.3;
+}
+
+.stepper-desc {
+  font-size: 11px;
+  color: var(--muted);
+  opacity: 0.6;
+  line-height: 1.3;
+  transition: opacity 0.2s ease;
+}
+
+.stepper-step.active .stepper-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.stepper-step.active .stepper-desc {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.stepper-step.completed .stepper-label {
+  color: var(--ink);
+}
+
+.stepper-step.completed .stepper-desc {
+  opacity: 0.8;
+}
+
+.stepper-line {
+  flex: 1;
+  height: 3px;
+  background: var(--line);
+  margin: 0 4px;
+  min-width: 24px;
+  max-width: 60px;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.stepper-line-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.stepper-line.completed .stepper-line-fill {
+  width: 100%;
+}
+
+/* ── Section Navigation ── */
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.next-btn,
+.prev-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prev-btn .arrow {
+  font-size: 16px;
+}
+
+.next-btn .arrow {
+  font-size: 16px;
+}
+
+/* ── Templates ── */
+.template-accordion {
+  display: grid;
+  gap: 12px;
+}
+
+.template-group {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.template-group summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.15s ease;
+}
+
+.template-group summary:hover {
+  background: var(--line-light);
+}
+
+.template-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.template-group summary span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.template-group summary .chevron {
+  font-size: 16px;
+  color: var(--accent);
+  transition: transform 0.2s ease;
+  margin-left: 8px;
+}
+
+.template-group[open] summary .chevron {
+  transform: rotate(180deg);
+}
+
+.template-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 12px 16px 16px;
+  background: var(--panel);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+
+.template-list.open {
+  opacity: 1;
+}
+
+.template-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: left;
+  background: var(--panel);
+  cursor: pointer;
+  min-height: 80px;
+  display: grid;
+  gap: 6px;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.template-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.template-card.new {
+  border-style: dashed;
+  background: var(--line-light);
+}
+
+.template-plus {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.template-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-md);
+  background: #f8f7ff;
+}
+
+.template-thumb {
+  height: 42px;
+  border-radius: 6px;
+  background: var(--line-light);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.template-label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.template-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Upload ── */
+.upload {
+  display: grid;
+  gap: 16px;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-drop {
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+  background: var(--panel);
+  cursor: pointer;
+}
+
+.upload-drop:hover {
+  border-color: var(--accent);
+  background: #faf9ff;
+}
+
+.upload-drop.dragover {
+  border-color: var(--accent);
+  background: #f0eeff;
+}
+
+.upload-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: #f0eeff;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.upload-title {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.upload-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.upload-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.paste-box {
+  display: none;
+  gap: 10px;
+}
+
+.paste-box.active {
+  display: grid;
+}
+
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.textarea {
+  min-height: 120px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+/* ── Source List ── */
+.source-list {
+  display: grid;
+  gap: 10px;
+}
+
+.source-empty {
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  background: var(--line-light);
+  text-align: center;
+}
+
+.source-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  transition: box-shadow 0.15s ease;
+}
+
+.source-item:hover {
+  box-shadow: var(--shadow);
+}
+
+.thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: #f0eeff;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 11px;
+  overflow: hidden;
+  color: var(--accent);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.source-title {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.source-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Preview ── */
+.preview {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.preview-empty {
+  min-height: 400px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  background: var(--line-light);
+}
+
+.prompt-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 14px;
+  height: 44px;
+  transition: border-color 0.15s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+/* ── Buttons ── */
+.btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  background: var(--line-light);
+  color: var(--ink);
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--line);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.25);
+}
+
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.btn.ghost:hover {
+  background: var(--line-light);
+}
+
+.btn.small {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.generate-btn {
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.generate-btn .arrow {
+  font-size: 16px;
+}
+
+/* ── Chips ── */
+.chip {
+  border: 1px solid var(--line);
+  background: var(--line-light);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.chip:hover {
+  background: var(--line);
+}
+
+.chip.danger {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.chip.danger:hover {
+  background: #fee2e2;
+}
+
+/* ── Export Grid ── */
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.export-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.export-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  background: #faf9ff;
+}
+
+.export-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: #f0eeff;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.export-card-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── Slide Viewer ── */
+.slide-viewer {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 16px;
+  min-height: 480px;
+}
+
+.slide-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slide-canvas {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f8f8fa;
+  position: relative;
+  min-height: 420px;
+}
+
+.slide-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.slide-counter {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Slide Sidebar ── */
+.slide-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slide-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.slide-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.slide-thumb {
+  position: relative;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+}
+
+.slide-thumb:hover {
+  border-color: var(--accent);
+}
+
+.slide-thumb.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.slide-thumb-inner {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+
+.slide-thumb-number {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255,255,255,0.85);
+  padding: 1px 4px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.slide-thumb-delete {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: rgba(220,38,38,0.85);
+  color: #fff;
+  font-size: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  line-height: 1;
+  padding: 0;
+  font-family: inherit;
+}
+
+.slide-thumb:hover .slide-thumb-delete {
+  display: flex;
+}
+
+/* ── Slide Type Picker ── */
+.slide-type-picker {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.slide-type-picker.open {
+  display: flex;
+}
+
+.slide-type-picker-title {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.slide-type-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.12s ease;
+}
+
+.slide-type-option:hover {
+  border-color: var(--accent);
+  background: #faf9ff;
+}
+
+.slide-type-icon {
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+  color: var(--accent);
+}
+
+/* ── Slide Content (inside canvas) ── */
+.slide-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+.slide-header-bar {
+  height: 32px;
+  background: #1e3a5f;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.slide-logo {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.slide-logo svg {
+  height: 16px;
+  width: auto;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cover slide – Belastingdienst huisstijl */
+.slide-cover {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-cover-vlak {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 57%;
+  background: #8FCAE7;
+  clip-path: polygon(
+    0% 0%,
+    95% 0%,
+    95% 30%,
+    100% 30%,
+    100% 88%,
+    50% 88%,
+    50% 100%,
+    0% 100%
+  );
+}
+
+.slide-cover-logo {
+  position: absolute;
+  top: 0;
+  left: 47.5%;
+  height: 17.2%;
+  z-index: 2;
+}
+
+.slide-cover-logo img,
+.slide-cover-logo svg {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.slide-cover-textblock {
+  position: absolute;
+  left: 4%;
+  top: 20%;
+  width: 44%;
+  color: #154273;
+}
+
+.slide-cover-title {
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.15;
+  color: #154273;
+  min-height: 1em;
+}
+
+.slide-cover-date {
+  margin-top: 14px;
+  font-size: 14px;
+  font-style: italic;
+  color: #154273;
+  min-height: 1em;
+}
+
+/* Content slide */
+.slide-content-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.slide-content-left {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-content-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-content-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slide-content-list li {
+  font-size: 13px;
+  color: #374151;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+  min-height: 1em;
+}
+
+.slide-content-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1e3a5f;
+}
+
+.slide-content-right {
+  background: #e8f0fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8ba4c4;
+  font-size: 13px;
+}
+
+/* Text slide */
+.slide-text-body {
+  flex: 1;
+  padding: 28px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-text-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-text-paragraph {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 14px;
+  min-height: 1em;
+}
+
+/* Quote slide */
+.slide-quote-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.slide-quote-image {
+  background: #e8f0fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8ba4c4;
+  font-size: 13px;
+}
+
+.slide-quote-content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-quote-mark {
+  font-size: 48px;
+  line-height: 1;
+  color: #1e3a5f;
+  opacity: 0.2;
+  font-family: Georgia, serif;
+  margin-bottom: 8px;
+}
+
+.slide-quote-text {
+  font-size: 15px;
+  font-style: italic;
+  color: #1e3a5f;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-quote-author {
+  font-size: 12px;
+  color: #4a6fa5;
+  font-weight: 600;
+  min-height: 1em;
+}
+
+/* ── Belastingdienst Huisstijl Slides ── */
+.bd-content-slide,
+.bd-text-slide,
+.bd-quote-right,
+.bd-quote-left {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+}
+
+.bd-logo {
+  position: absolute;
+  top: 0;
+  left: 47.5%;
+  height: 17.2%;
+  z-index: 3;
+}
+
+.bd-logo img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.bd-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #154273;
+  letter-spacing: 0.02em;
+  min-height: 1em;
+}
+
+.bd-section-abs {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  z-index: 2;
+}
+
+.bd-slide-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #154273;
+  line-height: 1.2;
+  margin-top: 8px;
+  min-height: 1em;
+}
+
+.bd-slide-body {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #1A1A1A;
+  margin-top: 10px;
+  min-height: 1em;
+}
+
+.bd-slide-body strong {
+  font-weight: 700;
+}
+
+/* BD Content Slide */
+.bd-content-slide .bd-right-block {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #DAE9F3;
+}
+
+.bd-content-slide .bd-left-area {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 48px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1;
+}
+
+.bd-illustration-placeholder {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38%;
+  height: 45%;
+  border: 2px dashed rgba(21,66,115,0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #154273;
+  font-size: 11px;
+  opacity: 0.4;
+  text-align: center;
+  z-index: 1;
+}
+
+/* BD Text Slide */
+.bd-text-slide .bd-text-area {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 48px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bd-text-slide .bd-slide-title {
+  max-width: 80%;
+}
+
+.bd-text-slide .bd-slide-body {
+  max-width: 75%;
+}
+
+/* BD Quote Right */
+.bd-quote-right .bd-blue-block-l {
+  position: absolute;
+  left: 0;
+  top: 52px;
+  width: 48%;
+  height: 58%;
+  background: #DAE9F3;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 55% 75%, 55% 100%, 0% 100%);
+  z-index: 1;
+}
+
+.bd-quote-title {
+  position: absolute;
+  left: 32px;
+  top: 80px;
+  width: 42%;
+  font-size: 24px;
+  font-weight: 400;
+  color: #154273;
+  line-height: 1.2;
+  z-index: 2;
+  min-height: 1em;
+}
+
+.bd-quote-area {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  width: 42%;
+  z-index: 2;
+}
+
+.bd-quote-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1A1A1A;
+  min-height: 1em;
+}
+
+.bd-quote-source {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #555;
+  min-height: 1em;
+}
+
+.bd-photo-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bd-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 12px;
+  background: linear-gradient(135deg, #b8b8b8 0%, #d0d0d0 100%);
+}
+
+/* BD Quote Left */
+.bd-quote-left .bd-photo-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bd-quote-left .bd-right-block {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #DAE9F3;
+}
+
+.bd-ql-text-area {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 64px 36px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+}
+
+.bd-ql-text-area .bd-slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.bd-slide-subtitle {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #1A1A1A;
+  margin-top: 6px;
+  min-height: 1em;
+}
+
+.bd-ql-text-area .bd-quote-source {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: 11px;
+  color: #1A1A1A;
+}
+
+/* Editable fields */
+[contenteditable] {
+  outline: none;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: text;
+}
+
+[contenteditable]:hover {
+  background: rgba(108, 92, 231, 0.06);
+}
+
+[contenteditable]:focus {
+  background: rgba(108, 92, 231, 0.1);
+  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+}
+
+/* ── Generating Overlay ── */
+.generating-overlay {
+  display: none;
+  position: relative;
+  min-height: 400px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  align-items: center;
+  justify-content: center;
+}
+
+.generating-overlay.active {
+  display: flex;
+}
+
+.generating-overlay.active + .slide-viewer {
+  display: none;
+}
+
+.generating-overlay.active ~ .prompt-row {
+  display: none;
+}
+
+.generating-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.generating-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.generating-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.generating-sub {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.generating-progress {
+  width: 240px;
+  height: 4px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.generating-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.generating-error {
+  color: #dc2626;
+  font-size: 13px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* ── Dialog ── */
+.dialog-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.dialog-backdrop.open {
+  display: flex;
+}
+
+.dialog {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 440px;
+  margin: 16px;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dialog-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dialog-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--muted);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-close:hover {
+  background: var(--line-light);
+}
+
+.dialog-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dialog-body p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--line-light);
+}
+
+/* ── API Key indicator ── */
+.btn-icon.has-key {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .content {
+    padding: 20px 16px;
+  }
+
+  .topbar {
+    padding: 16px;
+  }
+
+  .template-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .export-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stepper-text {
+    display: none;
+  }
+
+  .stepper-step {
+    padding: 6px;
+  }
+
+  .stepper {
+    padding: 16px;
+  }
+
+  .slide-viewer {
+    grid-template-columns: 1fr;
+  }
+
+  .slide-sidebar {
+    order: -1;
+  }
+
+  .slide-thumbs {
+    flex-direction: row;
+    max-height: none;
+    overflow-x: auto;
+  }
+
+  .slide-thumb {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 500px) {
+  .template-list {
+    grid-template-columns: 1fr;
+  }
+
+  .export-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-drop {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .upload-actions {
+    margin-left: 0;
+  }
+
+  .prompt-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo">CG</div>
+          <div>
+            <div class="sidebar-title">Content Generator</div>
+            <div class="sidebar-sub">v1.0</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-section="templates">
+            <span class="nav-step">1</span>
+            <span class="nav-text">
+              <span class="nav-label">Templates</span>
+              <span class="nav-desc">Kies een uiting</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="bronnen">
+            <span class="nav-step">2</span>
+            <span class="nav-text">
+              <span class="nav-label">Bronnen</span>
+              <span class="nav-desc">Upload bestanden</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="preview">
+            <span class="nav-step">3</span>
+            <span class="nav-text">
+              <span class="nav-label">Preview</span>
+              <span class="nav-desc">Bekijk resultaat</span>
+            </span>
+          </a>
+          <a href="#" class="nav-item" data-section="export">
+            <span class="nav-step">4</span>
+            <span class="nav-text">
+              <span class="nav-label">Exporteren</span>
+              <span class="nav-desc">PDF, DOCX, HTML</span>
+            </span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-text">Templatebibliotheek v1</div>
+        </div>
+      </aside>
+
+      <div class="main">
+        <header class="topbar">
+          <div class="topbar-left">
+            <h1 class="page-title" id="pageTitle">Templates</h1>
+            <span class="step-indicator" id="stepIndicator">Stap 1 van 4</span>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn-icon" id="apiKeyBtn" type="button" title="API Key instellen">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </button>
+            <button class="btn-icon" id="themeToggle" type="button" title="Thema wisselen">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="content">
+          <!-- Stepper -->
+          <div class="stepper">
+            <div class="stepper-step active" data-step="templates">
+              <div class="stepper-circle">
+                <span class="stepper-number">1</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Template</div>
+                <div class="stepper-desc">Kies een uiting</div>
+              </div>
+            </div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
+            <div class="stepper-step" data-step="bronnen">
+              <div class="stepper-circle">
+                <span class="stepper-number">2</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Bronnen</div>
+                <div class="stepper-desc">Upload bestanden</div>
+              </div>
+            </div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
+            <div class="stepper-step" data-step="preview">
+              <div class="stepper-circle">
+                <span class="stepper-number">3</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Preview</div>
+                <div class="stepper-desc">Bekijk resultaat</div>
+              </div>
+            </div>
+            <div class="stepper-line"><div class="stepper-line-fill"></div></div>
+            <div class="stepper-step" data-step="export">
+              <div class="stepper-circle">
+                <span class="stepper-number">4</span>
+                <svg class="stepper-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="stepper-text">
+                <div class="stepper-label">Export</div>
+                <div class="stepper-desc">Download bestand</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Templates -->
+          <section class="section active" id="sectionTemplates">
+            <div class="section-header">
+              <h2>Soort digitale uiting</h2>
+              <p class="section-desc">Kies een categorie en daarna een template.</p>
+            </div>
+            <div class="template-accordion" id="templateAccordion"></div>
+            <div class="section-nav">
+              <div></div>
+              <button class="btn primary next-btn" data-next="bronnen" type="button">
+                Bronnen toevoegen <span class="arrow">&#8594;</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Bronnen -->
+          <section class="section" id="sectionBronnen">
+            <div class="section-header">
+              <h2>Voeg bronnen toe</h2>
+              <p class="section-desc">Upload bestanden of plak tekst als bron voor je content.</p>
+            </div>
+            <div class="upload">
+              <input id="fileInput" class="file-input" type="file" multiple />
+              <div class="upload-drop" id="uploadDrop">
+                <div class="upload-icon-wrap">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div>
+                  <div class="upload-title">Sleep bestanden of klik om te uploaden</div>
+                  <div class="upload-sub">PDF, DOCX, TXT, CSV, PNG, JPG</div>
+                </div>
+                <div class="upload-actions">
+                  <button class="btn small" id="fileButton" type="button">Bestanden kiezen</button>
+                  <button class="btn small ghost" id="pasteButton" type="button">Tekst plakken</button>
+                </div>
+              </div>
+              <div class="paste-box" id="pasteBox">
+                <label class="label">Tekst plakken</label>
+                <textarea class="textarea" placeholder="Plak hier notities, ruwe data of samenvattingen..."></textarea>
+              </div>
+              <div class="source-list" id="sourceList">
+                <div class="source-empty" id="sourceEmpty">
+                  Nog geen bronnen toegevoegd. Upload bestanden om te starten.
+                </div>
+              </div>
+            </div>
+            <div class="section-nav">
+              <button class="btn ghost prev-btn" data-prev="templates" type="button">
+                <span class="arrow">&#8592;</span> Template kiezen
+              </button>
+              <button class="btn primary next-btn" data-next="preview" type="button">
+                Preview bekijken <span class="arrow">&#8594;</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Preview -->
+          <section class="section" id="sectionPreview">
+            <div class="section-header">
+              <h2>Preview bekijken</h2>
+              <p class="section-desc">Klik op tekst om direct aan te passen.</p>
+            </div>
+            <div class="generating-overlay" id="generatingOverlay">
+              <div class="generating-content">
+                <div class="generating-spinner"></div>
+                <div class="generating-title">Presentatie genereren...</div>
+                <div class="generating-sub" id="generatingStatus">Bronnen analyseren</div>
+                <div class="generating-progress">
+                  <div class="generating-progress-bar" id="generatingProgressBar"></div>
+                </div>
+              </div>
+            </div>
+            <div class="slide-viewer" id="slideViewer">
+              <div class="slide-main">
+                <div class="slide-canvas" id="slideCanvas"></div>
+                <div class="slide-controls">
+                  <button class="btn small ghost" id="prevSlide" type="button">&#8592; Vorige</button>
+                  <span class="slide-counter" id="slideCounter">Slide 1 van 1</span>
+                  <button class="btn small ghost" id="nextSlide" type="button">Volgende &#8594;</button>
+                </div>
+              </div>
+              <div class="slide-sidebar">
+                <div class="slide-sidebar-header">
+                  <span>Slides</span>
+                  <button class="btn small" id="addSlideBtn" type="button">+ Toevoegen</button>
+                </div>
+                <div class="slide-thumbs" id="slideThumbs"></div>
+                <div class="slide-type-picker" id="slideTypePicker">
+                  <div class="slide-type-picker-title">Kies slide type:</div>
+                  <button class="slide-type-option" data-type="content" type="button">
+                    <span class="slide-type-icon">&#9776;</span> Content
+                  </button>
+                  <button class="slide-type-option" data-type="text" type="button">
+                    <span class="slide-type-icon">&#182;</span> Tekst
+                  </button>
+                  <button class="slide-type-option" data-type="quote-right" type="button">
+                    <span class="slide-type-icon">&#10078;</span> Quote rechts
+                  </button>
+                  <button class="slide-type-option" data-type="quote-left" type="button">
+                    <span class="slide-type-icon">&#10077;</span> Quote links
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="prompt-row">
+              <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
+              <button class="btn primary generate-btn" id="generateBtn" type="button">
+                Genereer <span class="arrow">&#8594;</span>
+              </button>
+            </div>
+            <div class="section-nav">
+              <button class="btn ghost prev-btn" data-prev="bronnen" type="button">
+                <span class="arrow">&#8592;</span> Bronnen aanpassen
+              </button>
+              <button class="btn primary next-btn" data-next="export" type="button">
+                Exporteren <span class="arrow">&#8594;</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Section: Export -->
+          <section class="section" id="sectionExport">
+            <div class="section-header">
+              <h2>Exporteren</h2>
+              <p class="section-desc">Kies een formaat om je document te downloaden.</p>
+            </div>
+            <div class="export-grid" id="exportGrid">
+              <button class="export-card" type="button" data-format="pdf">
+                <span class="export-card-icon">PDF</span>
+                <span class="export-card-label">PDF Document</span>
+              </button>
+              <button class="export-card" type="button" data-format="docx">
+                <span class="export-card-icon">DOCX</span>
+                <span class="export-card-label">Word Document</span>
+              </button>
+              <button class="export-card" type="button" data-format="html">
+                <span class="export-card-icon">HTML</span>
+                <span class="export-card-label">Webpagina</span>
+              </button>
+              <button class="export-card" type="button" data-format="pptx">
+                <span class="export-card-icon">PPTX</span>
+                <span class="export-card-label">PowerPoint</span>
+              </button>
+              <button class="export-card" type="button" data-format="png">
+                <span class="export-card-icon">PNG</span>
+                <span class="export-card-label">Afbeelding</span>
+              </button>
+              <button class="export-card" type="button" data-format="svg">
+                <span class="export-card-icon">SVG</span>
+                <span class="export-card-label">Vector</span>
+              </button>
+            </div>
+            <div class="section-nav">
+              <button class="btn ghost prev-btn" data-prev="preview" type="button">
+                <span class="arrow">&#8592;</span> Terug naar preview
+              </button>
+              <div></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Key Dialog -->
+    <div class="dialog-backdrop" id="apiKeyDialog">
+      <div class="dialog">
+        <div class="dialog-header">
+          <h3>API Key instellen</h3>
+          <button class="dialog-close" id="apiKeyDialogClose" type="button">&times;</button>
+        </div>
+        <div class="dialog-body">
+          <p>Voer je Anthropic API key in om presentaties te kunnen genereren.</p>
+          <label class="label" for="apiKeyInput">API Key</label>
+          <input class="input" id="apiKeyInput" type="password" placeholder="sk-ant-..." />
+        </div>
+        <div class="dialog-footer">
+          <button class="btn ghost" id="apiKeyCancel" type="button">Annuleren</button>
+          <button class="btn primary" id="apiKeySave" type="button">Opslaan</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+const generateBtn = document.getElementById('generateBtn');
+const templateAccordion = document.getElementById('templateAccordion');
+const uploadDrop = document.getElementById('uploadDrop');
+const fileInput = document.getElementById('fileInput');
+const fileButton = document.getElementById('fileButton');
+const pasteButton = document.getElementById('pasteButton');
+const pasteBox = document.getElementById('pasteBox');
+const sourceList = document.getElementById('sourceList');
+const sourceEmpty = document.getElementById('sourceEmpty');
+const pageTitle = document.getElementById('pageTitle');
+const stepIndicator = document.getElementById('stepIndicator');
+const generatingOverlay = document.getElementById('generatingOverlay');
+const generatingStatus = document.getElementById('generatingStatus');
+const generatingProgressBar = document.getElementById('generatingProgressBar');
+
+const sectionMap = {
+  templates: { el: document.getElementById('sectionTemplates'), title: 'Templates' },
+  bronnen: { el: document.getElementById('sectionBronnen'), title: 'Bronnen' },
+  preview: { el: document.getElementById('sectionPreview'), title: 'Preview' },
+  export: { el: document.getElementById('sectionExport'), title: 'Exporteren' },
+};
+
+const templatesByCategory = [
+  {
+    id: 'presentaties',
+    label: 'Presentaties',
+    templates: [
+      { name: 'Projectupdate', meta: 'Voortgang + besluitpunten' },
+      { name: 'Resultaten', meta: 'KPI dashboards + highlights' },
+      { name: 'Voorstel', meta: 'Aanpak + impact' },
+    ],
+  },
+  {
+    id: 'rapportages',
+    label: 'Rapportages',
+    templates: [
+      { name: 'Gebruikerstest', meta: 'Cover + managementsamenvatting' },
+      { name: 'Onderzoeksrapport', meta: 'Methodiek + bevindingen' },
+      { name: 'Evaluatie', meta: 'Doelstellingen + conclusies' },
+    ],
+  },
+  {
+    id: 'infographics',
+    label: 'Infographics',
+    templates: [
+      { name: 'Proces', meta: 'Stappen + rollen' },
+      { name: 'Statistieken', meta: 'Data in visuele blokken' },
+      { name: 'Tijdlijn', meta: 'Fases + mijlpalen' },
+    ],
+  },
+];
+
+const sources = [];
+let isGenerating = false;
+let hasGenerated = false;
+
+/* ── API Key Management ── */
+const apiKeyDialog = document.getElementById('apiKeyDialog');
+const apiKeyInput = document.getElementById('apiKeyInput');
+const apiKeyBtn = document.getElementById('apiKeyBtn');
+const apiKeySave = document.getElementById('apiKeySave');
+const apiKeyCancel = document.getElementById('apiKeyCancel');
+const apiKeyDialogClose = document.getElementById('apiKeyDialogClose');
+
+function getApiKey() {
+  return localStorage.getItem('cg_api_key') || '';
+}
+
+function setApiKey(key) {
+  localStorage.setItem('cg_api_key', key);
+  updateApiKeyIndicator();
+}
+
+function updateApiKeyIndicator() {
+  if (getApiKey()) {
+    apiKeyBtn.classList.add('has-key');
+  } else {
+    apiKeyBtn.classList.remove('has-key');
+  }
+}
+
+function openApiKeyDialog() {
+  apiKeyInput.value = getApiKey();
+  apiKeyDialog.classList.add('open');
+  apiKeyInput.focus();
+}
+
+function closeApiKeyDialog() {
+  apiKeyDialog.classList.remove('open');
+}
+
+apiKeyBtn.addEventListener('click', openApiKeyDialog);
+apiKeySave.addEventListener('click', function () {
+  setApiKey(apiKeyInput.value.trim());
+  closeApiKeyDialog();
+});
+apiKeyCancel.addEventListener('click', closeApiKeyDialog);
+apiKeyDialogClose.addEventListener('click', closeApiKeyDialog);
+apiKeyDialog.addEventListener('click', function (e) {
+  if (e.target === apiKeyDialog) closeApiKeyDialog();
+});
+apiKeyInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    setApiKey(apiKeyInput.value.trim());
+    closeApiKeyDialog();
+  }
+});
+
+updateApiKeyIndicator();
+
+/* ── Navigation ── */
+const stepOrder = ['templates', 'bronnen', 'preview', 'export'];
+let currentStepIndex = 0;
+
+function switchSection(sectionKey) {
+  const newIndex = stepOrder.indexOf(sectionKey);
+  if (newIndex === -1) return;
+
+  // Update sections
+  document.querySelectorAll('.section').forEach(function (s) {
+    s.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(function (n) {
+    n.classList.remove('active');
+    n.classList.remove('completed');
+  });
+
+  var section = sectionMap[sectionKey];
+  if (section) {
+    section.el.classList.add('active');
+    pageTitle.textContent = section.title;
+  }
+
+  // Mark completed steps in sidebar
+  stepOrder.forEach(function (key, i) {
+    var navItem = document.querySelector('.nav-item[data-section="' + key + '"]');
+    if (!navItem) return;
+    if (i < newIndex) {
+      navItem.classList.add('completed');
+    }
+  });
+
+  var navItem = document.querySelector('.nav-item[data-section="' + sectionKey + '"]');
+  if (navItem) {
+    navItem.classList.add('active');
+  }
+
+  // Update stepper
+  document.querySelectorAll('.stepper-step').forEach(function (step, i) {
+    step.classList.remove('active', 'completed');
+    if (i < newIndex) {
+      step.classList.add('completed');
+    } else if (i === newIndex) {
+      step.classList.add('active');
+    }
+  });
+
+  // Update stepper lines
+  document.querySelectorAll('.stepper-line').forEach(function (line, i) {
+    line.classList.remove('completed');
+    if (i < newIndex) {
+      line.classList.add('completed');
+    }
+  });
+
+  // Update step indicator
+  if (stepIndicator) {
+    stepIndicator.textContent = 'Stap ' + (newIndex + 1) + ' van 4';
+  }
+
+  currentStepIndex = newIndex;
+
+  // Auto-generate when navigating to preview
+  if (sectionKey === 'preview' && !hasGenerated && !isGenerating) {
+    startGeneration();
+  }
+}
+
+// Sidebar nav clicks
+document.querySelectorAll('.nav-item').forEach(function (item) {
+  item.addEventListener('click', function (e) {
+    e.preventDefault();
+    var section = this.getAttribute('data-section');
+    switchSection(section);
+  });
+});
+
+// Stepper clicks
+document.querySelectorAll('.stepper-step').forEach(function (step) {
+  step.addEventListener('click', function () {
+    var section = this.getAttribute('data-step');
+    switchSection(section);
+  });
+});
+
+// Next/Previous buttons
+document.querySelectorAll('.next-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var next = this.getAttribute('data-next');
+    switchSection(next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+document.querySelectorAll('.prev-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var prev = this.getAttribute('data-prev');
+    switchSection(prev);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* ── Helpers ── */
+function formatBytes(bytes) {
+  if (!bytes && bytes !== 0) return '\u2014';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let value = bytes;
+  let unitIndex = 0;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+  return `${value.toFixed(value >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function getFileLabel(file) {
+  if (file.type.startsWith('image/')) return 'IMG';
+  const extension = file.name.split('.').pop() || '';
+  return extension.substring(0, 4).toUpperCase() || 'FILE';
+}
+
+/* ── Sources ── */
+function renderSources() {
+  sourceList.innerHTML = '';
+  if (sources.length === 0) {
+    sourceList.appendChild(sourceEmpty);
+    return;
+  }
+  sources.forEach((source) => {
+    const item = document.createElement('div');
+    item.className = 'source-item';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    if (source.previewUrl) {
+      const img = document.createElement('img');
+      img.src = source.previewUrl;
+      img.alt = source.name;
+      thumb.appendChild(img);
+    } else {
+      thumb.textContent = source.label;
+    }
+
+    const info = document.createElement('div');
+    const title = document.createElement('div');
+    title.className = 'source-title';
+    title.textContent = source.name;
+    const sub = document.createElement('div');
+    sub.className = 'source-sub';
+    sub.textContent = `${source.type || 'Bestand'} \u00B7 ${formatBytes(source.size)}`;
+    info.appendChild(title);
+    info.appendChild(sub);
+
+    const renameBtn = document.createElement('button');
+    renameBtn.className = 'chip';
+    renameBtn.type = 'button';
+    renameBtn.textContent = 'Hernoem';
+    renameBtn.addEventListener('click', () => {
+      const newName = prompt('Nieuwe naam', source.name);
+      if (newName && newName.trim()) {
+        source.name = newName.trim();
+        renderSources();
+      }
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'chip danger';
+    removeBtn.type = 'button';
+    removeBtn.textContent = 'Verwijder';
+    removeBtn.addEventListener('click', () => {
+      if (source.previewUrl) {
+        URL.revokeObjectURL(source.previewUrl);
+      }
+      const index = sources.findIndex((item) => item.id === source.id);
+      if (index !== -1) {
+        sources.splice(index, 1);
+        renderSources();
+        hasGenerated = false;
+      }
+    });
+
+    item.appendChild(thumb);
+    item.appendChild(info);
+    item.appendChild(renameBtn);
+    item.appendChild(removeBtn);
+    sourceList.appendChild(item);
+  });
+}
+
+function readFileContent(file) {
+  return new Promise((resolve) => {
+    const textTypes = ['text/', 'application/json', 'application/xml', 'application/csv'];
+    const textExtensions = ['.txt', '.csv', '.md', '.json', '.xml', '.html', '.htm', '.log'];
+    const isText = textTypes.some(t => file.type.startsWith(t)) ||
+                   textExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+
+    if (isText) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsText(file);
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+async function addFiles(fileList) {
+  for (const file of Array.from(fileList)) {
+    const id = `${file.name}-${file.size}-${file.lastModified}-${Math.random().toString(16).slice(2)}`;
+    const content = await readFileContent(file);
+    const source = {
+      id,
+      name: file.name,
+      size: file.size,
+      type: file.type ? file.type.split('/')[1]?.toUpperCase() : 'Bestand',
+      label: getFileLabel(file),
+      previewUrl: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      content: content,
+    };
+    sources.unshift(source);
+  }
+  hasGenerated = false;
+  renderSources();
+}
+
+/* ── Templates ── */
+function renderTemplates() {
+  templateAccordion.innerHTML = '';
+  templatesByCategory.forEach((group, groupIndex) => {
+    const details = document.createElement('details');
+    details.className = 'template-group';
+    details.open = groupIndex === 0;
+
+    const summary = document.createElement('summary');
+    summary.textContent = group.label;
+    const summaryNote = document.createElement('span');
+    summaryNote.textContent = `${group.templates.length + 1} templates`;
+    const summaryChevron = document.createElement('span');
+    summaryChevron.className = 'chevron';
+    summaryChevron.textContent = '\u2304';
+    summary.appendChild(summaryNote);
+    summary.appendChild(summaryChevron);
+    details.appendChild(summary);
+
+    const list = document.createElement('div');
+    list.className = 'template-list';
+
+    const newCard = document.createElement('button');
+    newCard.className = 'template-card new';
+    newCard.dataset.template = 'Nieuwe template';
+    newCard.innerHTML = `
+      <div class="template-thumb template-plus">+</div>
+      <div class="template-label">Nieuwe template</div>
+      <div class="template-meta">Start met een leeg template</div>
+    `;
+    newCard.addEventListener('click', () => selectTemplate(newCard));
+    list.appendChild(newCard);
+
+    group.templates.forEach((template, templateIndex) => {
+      const button = document.createElement('button');
+      button.className = 'template-card' + (groupIndex === 0 && templateIndex === 0 ? ' active' : '');
+      button.dataset.template = template.name;
+      button.innerHTML = `
+        <div class="template-thumb">Preview</div>
+        <div class="template-label">${template.name}</div>
+        <div class="template-meta">${template.meta}</div>
+      `;
+      button.addEventListener('click', () => selectTemplate(button));
+      list.appendChild(button);
+    });
+
+    details.appendChild(list);
+    templateAccordion.appendChild(details);
+
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        templateAccordion.querySelectorAll('details').forEach((other) => {
+          if (other !== details) {
+            other.open = false;
+          }
+        });
+      }
+      updateAccordionAnimation(details);
+    });
+
+    updateAccordionAnimation(details);
+  });
+}
+
+function updateAccordionAnimation(details) {
+  const list = details.querySelector('.template-list');
+  if (!list) return;
+  if (details.open) {
+    list.classList.add('open');
+    list.style.maxHeight = `${list.scrollHeight}px`;
+  } else {
+    list.classList.remove('open');
+    list.style.maxHeight = '0px';
+  }
+}
+
+function selectTemplate(button) {
+  document.querySelectorAll('.template-card').forEach((card) => {
+    card.classList.remove('active');
+  });
+  button.classList.add('active');
+  hasGenerated = false;
+}
+
+function getSelectedTemplate() {
+  const active = document.querySelector('.template-card.active');
+  return active ? active.dataset.template : 'Projectupdate';
+}
+
+/* ── Slides ── */
+const slideCanvas = document.getElementById('slideCanvas');
+const slideThumbs = document.getElementById('slideThumbs');
+const slideCounter = document.getElementById('slideCounter');
+const prevSlideBtn = document.getElementById('prevSlide');
+const nextSlideBtn = document.getElementById('nextSlide');
+const addSlideBtn = document.getElementById('addSlideBtn');
+const slideTypePicker = document.getElementById('slideTypePicker');
+
+const LOGO_SVG = `<svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">Belastingdienst</text></svg>`;
+
+
+let slides = [];
+let currentSlide = 0;
+
+function createSlide(type, data) {
+  const defaults = {
+    cover: { title: 'Titel van de presentatie', date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }) },
+    content: { title: 'Onderwerp', items: ['Eerste punt van bespreking', 'Tweede punt met toelichting', 'Derde belangrijk punt', 'Vierde punt of conclusie'] },
+    text: { title: 'Onderwerp', paragraph1: 'Hier kunt u een uitgebreide toelichting geven op het onderwerp. Deze tekst kan worden aangepast door erop te klikken.', paragraph2: 'Een tweede alinea met aanvullende informatie, context of achtergrond bij het onderwerp dat wordt gepresenteerd.' },
+    'quote-right': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '\u2014 Naam Auteur, Functie' },
+    'quote-left': { quote: 'Hier komt een inspirerend of belangrijk citaat dat relevant is voor de presentatie.', author: '\u2014 Naam Auteur, Functie' },
+  };
+  return { type, data: data || { ...defaults[type] }, id: Date.now() + Math.random() };
+}
+
+function renderSlideHTML(slide, editable) {
+  const ce = editable ? 'contenteditable="true"' : '';
+  const d = slide.data;
+  const header = `<div class="slide-header-bar"><div class="slide-logo">${LOGO_SVG}</div></div>`;
+
+  switch (slide.type) {
+    case 'cover':
+      return `<div class="slide-frame slide-cover">
+        <div class="slide-cover-vlak"></div>
+        <div class="slide-cover-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>
+        <div class="slide-cover-textblock">
+          <div class="slide-cover-title" ${ce} data-field="title">${d.title}</div>
+          <div class="slide-cover-date" ${ce} data-field="date">${d.date}</div>
+        </div>
+      </div>`;
+    case 'content':
+      const items = (d.items || []).map((item, i) => `<li ${ce} data-field="items" data-index="${i}">${item}</li>`).join('');
+      return `<div class="slide-frame slide-content-slide">${header}<div class="slide-content-body"><div class="slide-content-left"><div class="slide-content-title" ${ce} data-field="title">${d.title}</div><ul class="slide-content-list">${items}</ul></div><div class="slide-content-right">Afbeelding</div></div></div>`;
+    case 'text':
+      return `<div class="slide-frame slide-text-slide">${header}<div class="slide-text-body"><div class="slide-text-title" ${ce} data-field="title">${d.title}</div><div class="slide-text-paragraph" ${ce} data-field="paragraph1">${d.paragraph1}</div><div class="slide-text-paragraph" ${ce} data-field="paragraph2">${d.paragraph2}</div></div></div>`;
+    case 'quote-right':
+      return `<div class="slide-frame slide-quote-slide">${header}<div class="slide-quote-body"><div class="slide-quote-image">Afbeelding</div><div class="slide-quote-content"><div class="slide-quote-mark">\u201C</div><div class="slide-quote-text" ${ce} data-field="quote">${d.quote}</div><div class="slide-quote-author" ${ce} data-field="author">${d.author}</div></div></div></div>`;
+    case 'quote-left':
+      return `<div class="slide-frame slide-quote-slide">${header}<div class="slide-quote-body"><div class="slide-quote-content"><div class="slide-quote-mark">\u201C</div><div class="slide-quote-text" ${ce} data-field="quote">${d.quote}</div><div class="slide-quote-author" ${ce} data-field="author">${d.author}</div></div><div class="slide-quote-image">Afbeelding</div></div></div>`;
+    default:
+      return '';
+  }
+}
+
+/* ── Belastingdienst Huisstijl ── */
+function isBDTemplate() {
+  return getSelectedTemplate() === 'Projectupdate';
+}
+
+function renderBDSlideHTML(slide, editable) {
+  const ce = editable ? 'contenteditable="true"' : '';
+  const d = slide.data;
+  const logo = '<div class="bd-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>';
+
+  switch (slide.type) {
+    case 'cover':
+      return '<div class="slide-frame slide-cover">' +
+        '<div class="slide-cover-vlak"></div>' +
+        '<div class="slide-cover-logo"><img src="Belastingdienst_logo.png" alt="Belastingdienst"></div>' +
+        '<div class="slide-cover-textblock">' +
+          '<div class="slide-cover-title" ' + ce + ' data-field="title">' + d.title + '</div>' +
+          '<div class="slide-cover-date" ' + ce + ' data-field="date">' + d.date + '</div>' +
+        '</div></div>';
+    case 'content':
+      return '<div class="slide-frame bd-content-slide">' + logo +
+        '<div class="bd-right-block"></div>' +
+        '<div class="bd-left-area">' +
+          '<div class="bd-section-label" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + d.title + '</h2>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="body">' + (d.body || (d.items || []).join('. ')) + '</div>' +
+        '</div>' +
+        '<div class="bd-illustration-placeholder">Illustratie of<br>visualisatie</div>' +
+        '</div>';
+    case 'text':
+      return '<div class="slide-frame bd-text-slide">' + logo +
+        '<div class="bd-text-area">' +
+          '<div class="bd-section-label" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + d.title + '</h2>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="paragraph1">' + d.paragraph1 + '</div>' +
+          '<div class="bd-slide-body" ' + ce + ' data-field="paragraph2">' + d.paragraph2 + '</div>' +
+        '</div></div>';
+    case 'quote-right':
+      return '<div class="slide-frame bd-quote-right">' + logo +
+        '<div class="bd-section-label bd-section-abs" ' + ce + ' data-field="section">' + (d.section || '') + '</div>' +
+        '<div class="bd-blue-block-l"></div>' +
+        '<h2 class="bd-quote-title" ' + ce + ' data-field="title">' + (d.title || d.quote) + '</h2>' +
+        '<div class="bd-quote-area">' +
+          '<div class="bd-quote-text" ' + ce + ' data-field="quote">' + d.quote + '</div>' +
+          '<div class="bd-quote-source" ' + ce + ' data-field="author">' + d.author + '</div>' +
+        '</div>' +
+        '<div class="bd-photo-right"><div class="bd-photo-placeholder">Foto</div></div>' +
+        '</div>';
+    case 'quote-left':
+      return '<div class="slide-frame bd-quote-left">' + logo +
+        '<div class="bd-photo-left"><div class="bd-photo-placeholder">Foto</div></div>' +
+        '<div class="bd-right-block"></div>' +
+        '<div class="bd-ql-text-area">' +
+          '<h2 class="bd-slide-title" ' + ce + ' data-field="title">' + (d.title || d.quote) + '</h2>' +
+          '<div class="bd-slide-subtitle" ' + ce + ' data-field="subtitle">' + (d.subtitle || d.quote) + '</div>' +
+          '<div class="bd-quote-source" ' + ce + ' data-field="author">' + d.author + '</div>' +
+        '</div>' +
+        '</div>';
+    default:
+      return '';
+  }
+}
+
+function renderCurrentSlide() {
+  if (slides.length === 0) return;
+  const slide = slides[currentSlide];
+  slideCanvas.innerHTML = isBDTemplate() ? renderBDSlideHTML(slide, true) : renderSlideHTML(slide, true);
+  slideCounter.textContent = `Slide ${currentSlide + 1} van ${slides.length}`;
+
+  // Bind editable fields
+  slideCanvas.querySelectorAll('[contenteditable]').forEach(el => {
+    el.addEventListener('blur', () => {
+      const field = el.getAttribute('data-field');
+      const index = el.getAttribute('data-index');
+      if (field === 'items' && index !== null) {
+        slide.data.items[parseInt(index)] = el.textContent;
+      } else {
+        slide.data[field] = el.textContent;
+      }
+      renderThumbs();
+    });
+  });
+}
+
+function renderThumbs() {
+  slideThumbs.innerHTML = '';
+  slides.forEach((slide, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'slide-thumb' + (i === currentSlide ? ' active' : '');
+
+    const num = document.createElement('span');
+    num.className = 'slide-thumb-number';
+    num.textContent = i + 1;
+    thumb.appendChild(num);
+
+    if (i > 0) {
+      const del = document.createElement('button');
+      del.className = 'slide-thumb-delete';
+      del.type = 'button';
+      del.textContent = '\u00D7';
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        slides.splice(i, 1);
+        if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+        renderCurrentSlide();
+        renderThumbs();
+      });
+      thumb.appendChild(del);
+    }
+
+    const inner = document.createElement('div');
+    inner.className = 'slide-thumb-inner';
+    inner.innerHTML = isBDTemplate() ? renderBDSlideHTML(slide, false) : renderSlideHTML(slide, false);
+    const scale = 0.18;
+    inner.style.transform = `scale(${scale})`;
+    inner.style.width = (1 / scale * 100) + '%';
+    inner.style.height = (1 / scale * 100) + '%';
+    thumb.appendChild(inner);
+
+    thumb.addEventListener('click', () => {
+      currentSlide = i;
+      renderCurrentSlide();
+      renderThumbs();
+    });
+
+    slideThumbs.appendChild(thumb);
+  });
+}
+
+function initSlides() {
+  slides = [createSlide('cover'), createSlide('content'), createSlide('text')];
+  currentSlide = 0;
+  renderCurrentSlide();
+  renderThumbs();
+}
+
+prevSlideBtn.addEventListener('click', () => {
+  if (currentSlide > 0) {
+    currentSlide--;
+    renderCurrentSlide();
+    renderThumbs();
+  }
+});
+
+nextSlideBtn.addEventListener('click', () => {
+  if (currentSlide < slides.length - 1) {
+    currentSlide++;
+    renderCurrentSlide();
+    renderThumbs();
+  }
+});
+
+addSlideBtn.addEventListener('click', () => {
+  slideTypePicker.classList.toggle('open');
+});
+
+document.querySelectorAll('.slide-type-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.getAttribute('data-type');
+    slides.push(createSlide(type));
+    currentSlide = slides.length - 1;
+    renderCurrentSlide();
+    renderThumbs();
+    slideTypePicker.classList.remove('open');
+  });
+});
+
+/* ── Generation via Claude API ── */
+function getSourcesText() {
+  let text = '';
+  sources.forEach((source, i) => {
+    text += `\n--- Bron ${i + 1}: ${source.name} ---\n`;
+    if (source.content) {
+      // Limit to 8000 chars per source to stay within token limits
+      const trimmed = source.content.length > 8000
+        ? source.content.substring(0, 8000) + '\n[... ingekort ...]'
+        : source.content;
+      text += trimmed + '\n';
+    } else {
+      text += `(Bestandstype: ${source.type}, ${formatBytes(source.size)} - inhoud niet leesbaar als tekst)\n`;
+    }
+  });
+  return text;
+}
+
+function buildPrompt() {
+  const templateName = getSelectedTemplate();
+  const sourcesText = getSourcesText();
+  const userPrompt = document.querySelector('.prompt-row .input').value.trim();
+  const bd = isBDTemplate();
+
+  const bdSystem = `Je bent een presentatie-generator voor de Belastingdienst (Rijkshuisstijl).
+Je maakt professionele slide-presentaties op basis van bronmateriaal.
+
+Je MOET antwoorden met ALLEEN valid JSON, geen markdown, geen uitleg, geen tekst ervoor of erna.
+
+Het JSON-formaat is:
+{
+  "slides": [
+    { "type": "cover", "data": { "title": "...", "date": "..." } },
+    { "type": "content", "data": { "section": "Sectienaam", "title": "...", "body": "Paragraaftekst met <strong>nadruk</strong> waar nodig." } },
+    { "type": "text", "data": { "section": "Sectienaam", "title": "...", "paragraph1": "...", "paragraph2": "..." } },
+    { "type": "quote-right", "data": { "section": "Sectienaam", "title": "Grote impactvolle stelling", "quote": "Onderbouwend citaat...", "author": "— Naam, Functie" } },
+    { "type": "quote-left", "data": { "section": "Sectienaam", "title": "Grote titel", "subtitle": "Ondertitel of toelichting", "author": "— Naam, Functie" } }
+  ]
+}
+
+Regels:
+- De eerste slide MOET type "cover" zijn
+- Genereer 6-10 slides
+- Schrijf in helder, zakelijk Nederlands
+- Houd slides beknopt: max 3-4 zinnen body-tekst per slide
+- Wissel af tussen slide-typen voor visuele variatie
+- Elk slide-type heeft een "section" veld (kort label, bijv. "Aanleiding", "Analyse", "Voorstel")
+- content slides: body is HTML-tekst (gebruik <strong> voor nadruk)
+- Gebruik de bronnen als basis voor de inhoud`;
+
+  const defaultSystem = `Je bent een presentatie-generator. Je maakt professionele slide-presentaties op basis van bronmateriaal.
+
+Je MOET antwoorden met ALLEEN valid JSON, geen markdown, geen uitleg, geen tekst ervoor of erna.
+
+Het JSON-formaat is:
+{
+  "slides": [
+    {
+      "type": "cover",
+      "data": { "title": "...", "date": "..." }
+    },
+    {
+      "type": "content",
+      "data": { "title": "...", "items": ["...", "...", "...", "..."] }
+    },
+    {
+      "type": "text",
+      "data": { "title": "...", "paragraph1": "...", "paragraph2": "..." }
+    },
+    {
+      "type": "quote-right",
+      "data": { "quote": "...", "author": "— Naam, Functie" }
+    }
+  ]
+}
+
+Beschikbare slide types: cover, content, text, quote-right, quote-left
+- De eerste slide MOET type "cover" zijn
+- Genereer 5-8 slides
+- content slides hebben 3-5 items
+- Schrijf in het Nederlands
+- Maak de content professioneel en zakelijk
+- Gebruik de bronnen als basis voor de inhoud`;
+
+  const system = bd ? bdSystem : defaultSystem;
+
+  let userMessage = `Template type: ${templateName}\n`;
+  if (userPrompt) {
+    userMessage += `\nAanvullende instructie: ${userPrompt}\n`;
+  }
+  if (sources.length > 0) {
+    userMessage += `\nBronmateriaal:\n${sourcesText}`;
+  } else {
+    userMessage += `\nEr zijn geen bronnen toegevoegd. Genereer een voorbeeld-presentatie passend bij het template type.`;
+  }
+  userMessage += `\n\nGenereer nu de presentatie als JSON.`;
+
+  return { system, userMessage };
+}
+
+async function callClaudeAPI(system, userMessage) {
+  const apiKey = getApiKey();
+  const proxyUrl = window.location.origin + '/proxy.php';
+
+  const response = await fetch(proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      api_key: apiKey,
+      system: system,
+      messages: [{ role: 'user', content: userMessage }],
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 4096,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      throw new Error('Ongeldige API key. Controleer je key via het sleutel-icoon rechtsboven.');
+    }
+    throw new Error(errorData.error?.message || errorData.error || `API fout (${response.status})`);
+  }
+
+  const data = await response.json();
+
+  // Extract text from Claude response
+  const textBlock = data.content?.find(b => b.type === 'text');
+  if (!textBlock) {
+    throw new Error('Geen tekst ontvangen van de API.');
+  }
+
+  return textBlock.text;
+}
+
+function parseSlideJSON(text) {
+  // Try to extract JSON from the response
+  let jsonStr = text.trim();
+
+  // Remove markdown code fences if present
+  const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (jsonMatch) {
+    jsonStr = jsonMatch[1].trim();
+  }
+
+  const parsed = JSON.parse(jsonStr);
+  if (!parsed.slides || !Array.isArray(parsed.slides)) {
+    throw new Error('Ongeldig response formaat: geen slides array gevonden.');
+  }
+
+  return parsed.slides;
+}
+
+function showOverlay(show) {
+  if (show) {
+    generatingOverlay.classList.add('active');
+  } else {
+    generatingOverlay.classList.remove('active');
+  }
+}
+
+function updateProgress(percent, status) {
+  generatingProgressBar.style.width = percent + '%';
+  if (status) generatingStatus.textContent = status;
+}
+
+function showOverlayError(message) {
+  const existing = generatingOverlay.querySelector('.generating-error');
+  if (existing) existing.remove();
+
+  const spinner = generatingOverlay.querySelector('.generating-spinner');
+  if (spinner) spinner.style.display = 'none';
+
+  generatingOverlay.querySelector('.generating-title').textContent = 'Genereren mislukt';
+
+  const errorEl = document.createElement('div');
+  errorEl.className = 'generating-error';
+  errorEl.textContent = message;
+
+  const retryBtn = document.createElement('button');
+  retryBtn.className = 'btn primary';
+  retryBtn.textContent = 'Opnieuw proberen';
+  retryBtn.style.marginTop = '12px';
+  retryBtn.addEventListener('click', () => {
+    startGeneration();
+  });
+
+  const content = generatingOverlay.querySelector('.generating-content');
+  content.appendChild(errorEl);
+  content.appendChild(retryBtn);
+}
+
+function resetOverlay() {
+  const spinner = generatingOverlay.querySelector('.generating-spinner');
+  if (spinner) spinner.style.display = '';
+  generatingOverlay.querySelector('.generating-title').textContent = 'Presentatie genereren...';
+  const existing = generatingOverlay.querySelector('.generating-error');
+  if (existing) existing.remove();
+  const retryBtn = generatingOverlay.querySelector('.btn.primary');
+  if (retryBtn && retryBtn.textContent === 'Opnieuw proberen') retryBtn.remove();
+  updateProgress(0, 'Bronnen analyseren');
+}
+
+async function startGeneration() {
+  if (isGenerating) return;
+
+  // Check API key
+  if (!getApiKey()) {
+    openApiKeyDialog();
+    return;
+  }
+
+  isGenerating = true;
+  resetOverlay();
+  showOverlay(true);
+
+  try {
+    updateProgress(15, 'Bronnen analyseren...');
+    const { system, userMessage } = buildPrompt();
+
+    updateProgress(30, 'Presentatie genereren via Claude...');
+    const responseText = await callClaudeAPI(system, userMessage);
+
+    updateProgress(70, 'Slides opbouwen...');
+    const slideData = parseSlideJSON(responseText);
+
+    updateProgress(90, 'Presentatie laden...');
+
+    // Build slides from API response
+    slides = slideData.map(s => {
+      const validTypes = ['cover', 'content', 'text', 'quote-right', 'quote-left'];
+      const type = validTypes.includes(s.type) ? s.type : 'text';
+      return createSlide(type, s.data);
+    });
+
+    if (slides.length === 0) {
+      slides = [createSlide('cover')];
+    }
+
+    currentSlide = 0;
+    updateProgress(100, 'Klaar!');
+
+    // Short delay to show 100% before hiding overlay
+    await new Promise(r => setTimeout(r, 500));
+
+    showOverlay(false);
+    hasGenerated = true;
+    renderCurrentSlide();
+    renderThumbs();
+  } catch (err) {
+    showOverlayError(err.message);
+  } finally {
+    isGenerating = false;
+  }
+}
+
+/* ── Generate button ── */
+generateBtn.addEventListener('click', () => {
+  hasGenerated = false;
+  startGeneration();
+});
+
+/* ── File Upload ── */
+fileButton.addEventListener('click', () => {
+  fileInput.click();
+});
+
+pasteButton.addEventListener('click', () => {
+  pasteBox.classList.toggle('active');
+  if (pasteBox.classList.contains('active')) {
+    const textarea = pasteBox.querySelector('textarea');
+    textarea.focus();
+  }
+});
+
+// Save pasted text as source
+pasteBox.querySelector('textarea').addEventListener('blur', function () {
+  const text = this.value.trim();
+  if (text) {
+    const existing = sources.find(s => s.id === 'pasted-text');
+    if (existing) {
+      existing.content = text;
+      existing.size = new Blob([text]).size;
+    } else {
+      sources.unshift({
+        id: 'pasted-text',
+        name: 'Geplakte tekst',
+        size: new Blob([text]).size,
+        type: 'TXT',
+        label: 'TXT',
+        previewUrl: null,
+        content: text,
+      });
+    }
+    hasGenerated = false;
+    renderSources();
+  }
+});
+
+uploadDrop.addEventListener('click', (event) => {
+  if (event.target !== fileButton && event.target !== pasteButton) {
+    fileInput.click();
+  }
+});
+
+fileInput.addEventListener('change', (event) => {
+  if (event.target.files.length > 0) {
+    addFiles(event.target.files);
+    fileInput.value = '';
+  }
+});
+
+['dragenter', 'dragover'].forEach((eventName) => {
+  uploadDrop.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    uploadDrop.classList.add('dragover');
+  });
+});
+
+['dragleave', 'drop'].forEach((eventName) => {
+  uploadDrop.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    uploadDrop.classList.remove('dragover');
+  });
+});
+
+uploadDrop.addEventListener('drop', (event) => {
+  if (event.dataTransfer.files.length > 0) {
+    addFiles(event.dataTransfer.files);
+  }
+});
+
+/* ── Init ── */
+renderTemplates();
+renderSources();
+
+</script>
+  </body>
+</html>

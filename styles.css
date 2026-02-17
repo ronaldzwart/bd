@@ -886,6 +886,849 @@ body {
   color: var(--ink);
 }
 
+/* ── Slide Viewer ── */
+.slide-viewer {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 16px;
+  min-height: 480px;
+}
+
+.slide-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slide-canvas {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f8f8fa;
+  position: relative;
+  min-height: 420px;
+}
+
+.slide-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.slide-counter {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Slide Sidebar ── */
+.slide-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slide-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.slide-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.slide-thumb {
+  position: relative;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+}
+
+.slide-thumb:hover {
+  border-color: var(--accent);
+}
+
+.slide-thumb.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.slide-thumb-inner {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+
+.slide-thumb-number {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255,255,255,0.85);
+  padding: 1px 4px;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.slide-thumb-delete {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: rgba(220,38,38,0.85);
+  color: #fff;
+  font-size: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  line-height: 1;
+  padding: 0;
+  font-family: inherit;
+}
+
+.slide-thumb:hover .slide-thumb-delete {
+  display: flex;
+}
+
+/* ── Slide Type Picker ── */
+.slide-type-picker {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.slide-type-picker.open {
+  display: flex;
+}
+
+.slide-type-picker-title {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.slide-type-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.12s ease;
+}
+
+.slide-type-option:hover {
+  border-color: var(--accent);
+  background: #faf9ff;
+}
+
+.slide-type-icon {
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+  color: var(--accent);
+}
+
+/* ── Slide Content (inside canvas) ── */
+.slide-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+.slide-header-bar {
+  height: 32px;
+  background: #1e3a5f;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.slide-logo {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.slide-logo svg {
+  height: 16px;
+  width: auto;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cover slide – Belastingdienst huisstijl */
+.slide-cover {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-cover-vlak {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 57%;
+  background: #8FCAE7;
+  clip-path: polygon(
+    0% 0%,
+    95% 0%,
+    95% 30%,
+    100% 30%,
+    100% 88%,
+    50% 88%,
+    50% 100%,
+    0% 100%
+  );
+}
+
+.slide-cover-logo {
+  position: absolute;
+  top: 0;
+  left: 47.5%;
+  height: 17.2%;
+  z-index: 2;
+}
+
+.slide-cover-logo img,
+.slide-cover-logo svg {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.slide-cover-textblock {
+  position: absolute;
+  left: 4%;
+  top: 20%;
+  width: 44%;
+  color: #154273;
+}
+
+.slide-cover-title {
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.15;
+  color: #154273;
+  min-height: 1em;
+}
+
+.slide-cover-date {
+  margin-top: 14px;
+  font-size: 14px;
+  font-style: italic;
+  color: #154273;
+  min-height: 1em;
+}
+
+/* Content slide */
+.slide-content-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.slide-content-left {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-content-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-content-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slide-content-list li {
+  font-size: 13px;
+  color: #374151;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+  min-height: 1em;
+}
+
+.slide-content-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1e3a5f;
+}
+
+.slide-content-right {
+  background: #e8f0fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8ba4c4;
+  font-size: 13px;
+}
+
+/* Text slide */
+.slide-text-body {
+  flex: 1;
+  padding: 28px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-text-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-text-paragraph {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 14px;
+  min-height: 1em;
+}
+
+/* Quote slide */
+.slide-quote-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.slide-quote-image {
+  background: #e8f0fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8ba4c4;
+  font-size: 13px;
+}
+
+.slide-quote-content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-quote-mark {
+  font-size: 48px;
+  line-height: 1;
+  color: #1e3a5f;
+  opacity: 0.2;
+  font-family: Georgia, serif;
+  margin-bottom: 8px;
+}
+
+.slide-quote-text {
+  font-size: 15px;
+  font-style: italic;
+  color: #1e3a5f;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  min-height: 1em;
+}
+
+.slide-quote-author {
+  font-size: 12px;
+  color: #4a6fa5;
+  font-weight: 600;
+  min-height: 1em;
+}
+
+/* ── Belastingdienst Huisstijl Slides ── */
+.bd-content-slide,
+.bd-text-slide,
+.bd-quote-right,
+.bd-quote-left {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+}
+
+.bd-logo {
+  position: absolute;
+  top: 0;
+  left: 47.5%;
+  height: 17.2%;
+  z-index: 3;
+}
+
+.bd-logo img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.bd-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #154273;
+  letter-spacing: 0.02em;
+  min-height: 1em;
+}
+
+.bd-section-abs {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  z-index: 2;
+}
+
+.bd-slide-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #154273;
+  line-height: 1.2;
+  margin-top: 8px;
+  min-height: 1em;
+}
+
+.bd-slide-body {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #1A1A1A;
+  margin-top: 10px;
+  min-height: 1em;
+}
+
+.bd-slide-body strong {
+  font-weight: 700;
+}
+
+/* BD Content Slide */
+.bd-content-slide .bd-right-block {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #DAE9F3;
+}
+
+.bd-content-slide .bd-left-area {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 48px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1;
+}
+
+.bd-illustration-placeholder {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38%;
+  height: 45%;
+  border: 2px dashed rgba(21,66,115,0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #154273;
+  font-size: 11px;
+  opacity: 0.4;
+  text-align: center;
+  z-index: 1;
+}
+
+/* BD Text Slide */
+.bd-text-slide .bd-text-area {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 48px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bd-text-slide .bd-slide-title {
+  max-width: 80%;
+}
+
+.bd-text-slide .bd-slide-body {
+  max-width: 75%;
+}
+
+/* BD Quote Right */
+.bd-quote-right .bd-blue-block-l {
+  position: absolute;
+  left: 0;
+  top: 52px;
+  width: 48%;
+  height: 58%;
+  background: #DAE9F3;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 55% 75%, 55% 100%, 0% 100%);
+  z-index: 1;
+}
+
+.bd-quote-title {
+  position: absolute;
+  left: 32px;
+  top: 80px;
+  width: 42%;
+  font-size: 24px;
+  font-weight: 400;
+  color: #154273;
+  line-height: 1.2;
+  z-index: 2;
+  min-height: 1em;
+}
+
+.bd-quote-area {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  width: 42%;
+  z-index: 2;
+}
+
+.bd-quote-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1A1A1A;
+  min-height: 1em;
+}
+
+.bd-quote-source {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #555;
+  min-height: 1em;
+}
+
+.bd-photo-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bd-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 12px;
+  background: linear-gradient(135deg, #b8b8b8 0%, #d0d0d0 100%);
+}
+
+/* BD Quote Left */
+.bd-quote-left .bd-photo-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bd-quote-left .bd-right-block {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #DAE9F3;
+}
+
+.bd-ql-text-area {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 64px 36px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+}
+
+.bd-ql-text-area .bd-slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.bd-slide-subtitle {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #1A1A1A;
+  margin-top: 6px;
+  min-height: 1em;
+}
+
+.bd-ql-text-area .bd-quote-source {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: 11px;
+  color: #1A1A1A;
+}
+
+/* Editable fields */
+[contenteditable] {
+  outline: none;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: text;
+}
+
+[contenteditable]:hover {
+  background: rgba(108, 92, 231, 0.06);
+}
+
+[contenteditable]:focus {
+  background: rgba(108, 92, 231, 0.1);
+  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+}
+
+/* ── Generating Overlay ── */
+.generating-overlay {
+  display: none;
+  position: relative;
+  min-height: 400px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  align-items: center;
+  justify-content: center;
+}
+
+.generating-overlay.active {
+  display: flex;
+}
+
+.generating-overlay.active + .slide-viewer {
+  display: none;
+}
+
+.generating-overlay.active ~ .prompt-row {
+  display: none;
+}
+
+.generating-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.generating-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.generating-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.generating-sub {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.generating-progress {
+  width: 240px;
+  height: 4px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.generating-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.generating-error {
+  color: #dc2626;
+  font-size: 13px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* ── Dialog ── */
+.dialog-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.dialog-backdrop.open {
+  display: flex;
+}
+
+.dialog {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 440px;
+  margin: 16px;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dialog-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dialog-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--muted);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-close:hover {
+  background: var(--line-light);
+}
+
+.dialog-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dialog-body p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--line-light);
+}
+
+/* ── API Key indicator ── */
+.btn-icon.has-key {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .sidebar {
@@ -922,6 +1765,24 @@ body {
 
   .stepper {
     padding: 16px;
+  }
+
+  .slide-viewer {
+    grid-template-columns: 1fr;
+  }
+
+  .slide-sidebar {
+    order: -1;
+  }
+
+  .slide-thumbs {
+    flex-direction: row;
+    max-height: none;
+    overflow-x: auto;
+  }
+
+  .slide-thumb {
+    min-width: 120px;
   }
 }
 
