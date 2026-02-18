@@ -11,12 +11,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Sync to server via rsync
-        uses: burnett01/rsync-deployments@6.0.0
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          switches: -avzr --delete --exclude ".git*" --exclude ".github" --exclude "README*" --exclude "CLAUDE.md" --exclude "standalone.html"
-          path: ./
-          remote_path: /home/public_html/
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_KEY }}
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/README*
+            **/CLAUDE.md
+            **/standalone.html
+            **/test/**
+            **/.claude/**
