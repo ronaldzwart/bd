@@ -747,7 +747,7 @@ Beschikbare slide types: cover, content, text, quote-right, quote-left
 
 async function callClaudeAPI(system, userMessage) {
   const apiKey = getApiKey();
-  const proxyUrl = window.location.origin + '/proxy.php';
+  const proxyUrl = 'proxy.php';
 
   const response = await fetch(proxyUrl, {
     method: 'POST',
