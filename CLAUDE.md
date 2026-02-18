@@ -2,26 +2,30 @@
 
 ## Deployment
 
-- **Server**: `46.225.56.233` (Ubuntu VPS, Hetzner)
-- **SSH**: `ssh root@46.225.56.233`
-- **Webserver**: Nginx
+- **Hosting**: Hetzner Shared Hosting (konsoleH)
+- **Server**: `www601.your-server.de` (IP: `162.55.254.99`)
+- **FTP user**: `ronaldzwart@gmail.com`
 - **URL**: https://www.ronaldzwart.nl
-- **Server pad**: `/home/public_html`
+- **Document root**: `/` (op de hosting)
 
 ### Automatisch deployen
 
-Bij elke push naar `main` wordt automatisch gedeployd via GitHub Actions (rsync naar `/home/public_html/`).
+Bij elke push naar `main` wordt automatisch gedeployd via GitHub Actions (FTP naar document root).
+
+GitHub Secrets benodigd:
+- `FTP_SERVER` = `www601.your-server.de`
+- `FTP_USERNAME` = `ronaldzwart@gmail.com`
+- `FTP_PASSWORD` = *(FTP wachtwoord)*
 
 ### Handmatig deployen
 
-```bash
-scp index.html styles.css app.js proxy.php root@46.225.56.233:/home/public_html/
-```
-
-### Eigenaar bestanden op server
-- User: `deploy`, Group: `deploy`
-- Na handmatig uploaden: `chown -R deploy:deploy /home/public_html`
+Upload via FTP-client (bijv. FileZilla) naar de document root:
+- Server: `www601.your-server.de`
+- Gebruiker: `ronaldzwart@gmail.com`
+- Bestanden: `index.html`, `styles.css`, `app.js`, `proxy.php`
 
 ## Belangrijk
+- Dit is shared hosting, GEEN VPS — er is geen SSH beschikbaar
+- Deploy gaat via FTP (niet rsync)
 - SSH is NIET beschikbaar vanuit de Claude Code omgeving (geen ssh binary)
 - Geef de gebruiker daarom altijd een kant-en-klaar commando om in zijn Mac terminal te plakken
