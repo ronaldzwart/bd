@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paden Infographic — Belastingdienst</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=RO+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --contrast-blauw: #154273;
+    --domein-blauw: #8FCAE7;
+    --domein-blauw-2: #ABD7ED;
+    --domein-blauw-3: #BCDFF0;
+    --domein-blauw-4: #CCE7F4;
+    --domein-blauw-5: #DDEFF8;
+    --domein-blauw-6: #EEF7FC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'RO Sans', 'Segoe UI', 'Calibri', Arial, sans-serif;
+    background: #fff;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .infographic {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  /* Logo */
+  .logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* Fase */
+  .fase {
+    margin-bottom: 48px;
+  }
+
+  .fase-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--domein-blauw);
+  }
+
+  /* Stappen grid */
+  .stappen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+  }
+
+  .stap {
+    background: var(--domein-blauw-6);
+    padding: 24px;
+    position: relative;
+  }
+
+  .stap-nummer {
+    width: 40px;
+    height: 40px;
+    background: var(--contrast-blauw);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .stap h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+  }
+
+  .stap p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  /* Verbindingslijn tussen stappen */
+  .stappen-met-lijn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .verbinding {
+    display: flex;
+    align-items: center;
+    padding-top: 44px;
+    color: var(--domein-blauw);
+    font-size: 24px;
+    flex-shrink: 0;
+    width: 32px;
+    justify-content: center;
+  }
+
+  /* Illustration Placeholders */
+  .illustration-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--domein-blauw-5);
+    border: 2px dashed #8FCAE7;
+    border-radius: 0;
+    color: #154273;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .illustration-placeholder .ph-icon { opacity: 0.45; }
+  .illustration-placeholder .ph-label { font-size: 11px; font-weight: 600; color: #154273; line-height: 1.3; opacity: 0.7; }
+  .illustration-placeholder .ph-size { font-size: 10px; color: #154273; opacity: 0.45; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--domein-blauw-5);
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .infographic { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <header class="header">
+    <div class="logo-wrapper">
+      <!-- Inline SVG logo hier -->
+      <svg height="80" viewBox="0 0 275 125" xmlns="http://www.w3.org/2000/svg" aria-label="Belastingdienst logo">
+        <style>.st0{fill:none;}.st1{fill:#154273;}</style>
+        <rect y="0" class="st0" width="275" height="125"/>
+        <rect y="0" class="st1" width="50" height="100"/>
+        <text x="58" y="115" font-family="'RO Sans',sans-serif" font-size="16" font-weight="700" fill="#154273">Belastingdienst</text>
+      </svg>
+    </div>
+    <h1>Titel van het proces</h1>
+    <p class="subtitle">Korte beschrijving van het proces of de tijdlijn</p>
+  </header>
+
+  <!-- Fase 1 -->
+  <section class="fase">
+    <h2 class="fase-title">Fase 1: Voorbereiding</h2>
+    <div class="stappen">
+      <div class="stap">
+        <div class="stap-nummer">1</div>
+        <div class="illustration-placeholder" style="width:80px;height:80px;margin-bottom:12px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>stap 1</span>
+          <span class="ph-size">80 × 80</span>
+        </div>
+        <h3>Stap titel</h3>
+        <p>Beschrijving van wat er in deze stap gebeurt.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-nummer">2</div>
+        <div class="illustration-placeholder" style="width:80px;height:80px;margin-bottom:12px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>stap 2</span>
+          <span class="ph-size">80 × 80</span>
+        </div>
+        <h3>Stap titel</h3>
+        <p>Beschrijving van wat er in deze stap gebeurt.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-nummer">3</div>
+        <div class="illustration-placeholder" style="width:80px;height:80px;margin-bottom:12px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>stap 3</span>
+          <span class="ph-size">80 × 80</span>
+        </div>
+        <h3>Stap titel</h3>
+        <p>Beschrijving van wat er in deze stap gebeurt.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fase 2 -->
+  <section class="fase">
+    <h2 class="fase-title">Fase 2: Uitvoering</h2>
+    <div class="stappen">
+      <div class="stap">
+        <div class="stap-nummer">4</div>
+        <div class="illustration-placeholder" style="width:80px;height:80px;margin-bottom:12px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>stap 4</span>
+          <span class="ph-size">80 × 80</span>
+        </div>
+        <h3>Stap titel</h3>
+        <p>Beschrijving van wat er in deze stap gebeurt.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-nummer">5</div>
+        <div class="illustration-placeholder" style="width:80px;height:80px;margin-bottom:12px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>stap 5</span>
+          <span class="ph-size">80 × 80</span>
+        </div>
+        <h3>Stap titel</h3>
+        <p>Beschrijving van wat er in deze stap gebeurt.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Belastingdienst &mdash; Meer informatie: belastingdienst.nl</p>
+  </footer>
+
+</div>
+</body>
+</html>

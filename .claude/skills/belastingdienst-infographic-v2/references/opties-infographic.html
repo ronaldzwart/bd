@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opties Infographic — Belastingdienst</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=RO+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --contrast-blauw: #154273;
+    --domein-blauw: #8FCAE7;
+    --domein-blauw-2: #ABD7ED;
+    --domein-blauw-3: #BCDFF0;
+    --domein-blauw-4: #CCE7F4;
+    --domein-blauw-5: #DDEFF8;
+    --domein-blauw-6: #EEF7FC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'RO Sans', 'Segoe UI', 'Calibri', Arial, sans-serif;
+    background: #fff;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .infographic {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  /* Logo */
+  .logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* Opties grid: 3 gelijke kolommen */
+  .opties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .optie-kolom {
+    background: var(--domein-blauw-6);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .optie-kolom .illustration-placeholder {
+    margin-bottom: 20px;
+  }
+
+  .optie-kolom h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .optie-kolom .optie-beschrijving {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .kenmerken-lijst {
+    width: 100%;
+    list-style: none;
+    margin-bottom: 16px;
+  }
+
+  .kenmerken-lijst li {
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--domein-blauw-4);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .kenmerken-lijst li:last-child {
+    border-bottom: none;
+  }
+
+  .kenmerken-lijst .kenmerk-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+  }
+
+  .voor { color: #39870C; }
+  .tegen { color: #A90061; }
+  .neutraal { color: var(--contrast-blauw); }
+
+  /* Label boven kenmerkenlijst */
+  .kenmerken-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  /* Vergelijkingstabel */
+  .vergelijking-sectie {
+    margin-top: 16px;
+  }
+
+  .vergelijking-sectie h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--domein-blauw);
+  }
+
+  .vergelijking-tabel {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .vergelijking-tabel th {
+    background: var(--contrast-blauw);
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  .vergelijking-tabel td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--domein-blauw-4);
+    color: #333;
+  }
+
+  .vergelijking-tabel tr:nth-child(even) td {
+    background: var(--domein-blauw-6);
+  }
+
+  .vergelijking-tabel .check {
+    color: #39870C;
+    font-weight: 700;
+  }
+
+  .vergelijking-tabel .cross {
+    color: #A90061;
+    font-weight: 700;
+  }
+
+  /* Illustration Placeholders */
+  .illustration-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--domein-blauw-5, #DDEFF8);
+    border: 2px dashed #8FCAE7;
+    border-radius: 0;
+    color: #154273;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .illustration-placeholder .ph-icon { opacity: 0.45; }
+  .illustration-placeholder .ph-label { font-size: 11px; font-weight: 600; color: #154273; line-height: 1.3; opacity: 0.7; }
+  .illustration-placeholder .ph-size { font-size: 10px; color: #154273; opacity: 0.45; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--domein-blauw-5);
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .infographic { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <header class="header">
+    <div class="logo-wrapper">
+      <!-- Inline SVG logo -->
+      <svg height="80" viewBox="0 0 275 125" xmlns="http://www.w3.org/2000/svg" aria-label="Belastingdienst logo">
+        <style>.st0{fill:none;}.st1{fill:#154273;}</style>
+        <rect y="0" class="st0" width="275" height="125"/>
+        <rect y="0" class="st1" width="50" height="100"/>
+        <text x="58" y="115" font-family="'RO Sans',sans-serif" font-size="16" font-weight="700" fill="#154273">Belastingdienst</text>
+      </svg>
+    </div>
+    <h1>Aangiftemogelijkheden vergeleken</h1>
+    <p class="subtitle">Welke aangifte-optie past het beste bij uw situatie?</p>
+  </header>
+
+  <!-- 3 Optie-kolommen -->
+  <section class="opties-grid">
+
+    <!-- Optie 1 -->
+    <div class="optie-kolom">
+      <div class="illustration-placeholder" style="width:200px;height:140px;" role="img" aria-label="Illustratie placeholder">
+        <svg class="ph-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span class="ph-label">Illustratie:<br>online aangifte</span>
+        <span class="ph-size">200 x 140</span>
+      </div>
+      <h2>Online aangifte</h2>
+      <p class="optie-beschrijving">Via Mijn Belastingdienst zelf uw aangifte indienen</p>
+
+      <p class="kenmerken-label">Kenmerken</p>
+      <ul class="kenmerken-lijst">
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Gratis beschikbaar</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Vooraf ingevuld</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Direct beschikbaar</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon tegen" viewBox="0 0 20 20" fill="currentColor"><path d="M4.3 4.3a1 1 0 011.4 0L10 8.6l4.3-4.3a1 1 0 111.4 1.4L11.4 10l4.3 4.3a1 1 0 01-1.4 1.4L10 11.4l-4.3 4.3a1 1 0 01-1.4-1.4L8.6 10 4.3 5.7a1 1 0 010-1.4z"/></svg>
+          <span>Geen persoonlijk advies</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Optie 2 -->
+    <div class="optie-kolom">
+      <div class="illustration-placeholder" style="width:200px;height:140px;" role="img" aria-label="Illustratie placeholder">
+        <svg class="ph-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span class="ph-label">Illustratie:<br>belastingadviseur</span>
+        <span class="ph-size">200 x 140</span>
+      </div>
+      <h2>Via belastingadviseur</h2>
+      <p class="optie-beschrijving">Een erkende adviseur helpt u bij het doen van aangifte</p>
+
+      <p class="kenmerken-label">Kenmerken</p>
+      <ul class="kenmerken-lijst">
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Persoonlijk advies op maat</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Complexe situaties mogelijk</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Uitstel van aangifte</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon tegen" viewBox="0 0 20 20" fill="currentColor"><path d="M4.3 4.3a1 1 0 011.4 0L10 8.6l4.3-4.3a1 1 0 111.4 1.4L11.4 10l4.3 4.3a1 1 0 01-1.4 1.4L10 11.4l-4.3 4.3a1 1 0 01-1.4-1.4L8.6 10 4.3 5.7a1 1 0 010-1.4z"/></svg>
+          <span>Kosten adviseur</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Optie 3 -->
+    <div class="optie-kolom">
+      <div class="illustration-placeholder" style="width:200px;height:140px;" role="img" aria-label="Illustratie placeholder">
+        <svg class="ph-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span class="ph-label">Illustratie:<br>aangiftehulp</span>
+        <span class="ph-size">200 x 140</span>
+      </div>
+      <h2>Gratis aangiftehulp</h2>
+      <p class="optie-beschrijving">Vrijwilligers helpen u gratis bij het invullen van uw aangifte</p>
+
+      <p class="kenmerken-label">Kenmerken</p>
+      <ul class="kenmerken-lijst">
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Geheel gratis</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon voor" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+          <span>Persoonlijke begeleiding</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon tegen" viewBox="0 0 20 20" fill="currentColor"><path d="M4.3 4.3a1 1 0 011.4 0L10 8.6l4.3-4.3a1 1 0 111.4 1.4L11.4 10l4.3 4.3a1 1 0 01-1.4 1.4L10 11.4l-4.3 4.3a1 1 0 01-1.4-1.4L8.6 10 4.3 5.7a1 1 0 010-1.4z"/></svg>
+          <span>Beperkte beschikbaarheid</span>
+        </li>
+        <li>
+          <svg class="kenmerk-icon tegen" viewBox="0 0 20 20" fill="currentColor"><path d="M4.3 4.3a1 1 0 011.4 0L10 8.6l4.3-4.3a1 1 0 111.4 1.4L11.4 10l4.3 4.3a1 1 0 01-1.4 1.4L10 11.4l-4.3 4.3a1 1 0 01-1.4-1.4L8.6 10 4.3 5.7a1 1 0 010-1.4z"/></svg>
+          <span>Alleen eenvoudige situaties</span>
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- Vergelijkingstabel -->
+  <section class="vergelijking-sectie">
+    <h2>Vergelijking op een rij</h2>
+    <table class="vergelijking-tabel">
+      <thead>
+        <tr>
+          <th>Kenmerk</th>
+          <th>Online aangifte</th>
+          <th>Belastingadviseur</th>
+          <th>Gratis aangiftehulp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kosten</td>
+          <td class="check">Gratis</td>
+          <td class="cross">Betaald</td>
+          <td class="check">Gratis</td>
+        </tr>
+        <tr>
+          <td>Persoonlijk advies</td>
+          <td class="cross">Nee</td>
+          <td class="check">Ja</td>
+          <td class="check">Ja</td>
+        </tr>
+        <tr>
+          <td>Complexe aangifte</td>
+          <td class="cross">Beperkt</td>
+          <td class="check">Ja</td>
+          <td class="cross">Nee</td>
+        </tr>
+        <tr>
+          <td>Beschikbaarheid</td>
+          <td class="check">24/7</td>
+          <td class="check">Op afspraak</td>
+          <td class="cross">Beperkt</td>
+        </tr>
+        <tr>
+          <td>Uitstel mogelijk</td>
+          <td class="cross">Nee</td>
+          <td class="check">Ja</td>
+          <td class="cross">Nee</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="footer">
+    <p>Belastingdienst &mdash; Meer informatie: belastingdienst.nl</p>
+  </footer>
+
+</div>
+</body>
+</html>

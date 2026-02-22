@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Infographic — Belastingdienst</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=RO+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --contrast-blauw: #154273;
+    --domein-blauw: #8FCAE7;
+    --domein-blauw-2: #ABD7ED;
+    --domein-blauw-3: #BCDFF0;
+    --domein-blauw-4: #CCE7F4;
+    --domein-blauw-5: #DDEFF8;
+    --domein-blauw-6: #EEF7FC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'RO Sans', 'Segoe UI', 'Calibri', Arial, sans-serif;
+    background: #fff;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .infographic {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  /* Logo */
+  .logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* Dashboard 2-koloms grid */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .dashboard-links,
+  .dashboard-rechts {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Stat-cards */
+  .stat-card {
+    background: var(--domein-blauw-6);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .stat-card-content {
+    flex: 1;
+  }
+
+  .stat-card .groot-nummer {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    line-height: 1.1;
+  }
+
+  .stat-card .stat-label {
+    font-size: 14px;
+    color: #333;
+    margin-top: 4px;
+  }
+
+  .stat-card .stat-beschrijving {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+  }
+
+  /* Donut chart sectie */
+  .donut-sectie {
+    background: var(--domein-blauw-6);
+    padding: 24px;
+  }
+
+  .donut-sectie h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 16px;
+  }
+
+  .donut-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .donut-chart {
+    flex-shrink: 0;
+  }
+
+  .donut-legenda {
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .donut-legenda li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .donut-legenda .legenda-kleur {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* Tekstvlakken rechterkolom */
+  .tekst-blok {
+    background: var(--domein-blauw-6);
+    padding: 24px;
+  }
+
+  .tekst-blok h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 12px;
+  }
+
+  .tekst-blok ul {
+    list-style: none;
+    font-size: 14px;
+  }
+
+  .tekst-blok ul li {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--domein-blauw-4);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .tekst-blok ul li:last-child {
+    border-bottom: none;
+  }
+
+  .bullet-icon {
+    width: 6px;
+    height: 6px;
+    background: var(--contrast-blauw);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  .highlight-getal {
+    font-weight: 700;
+    color: var(--contrast-blauw);
+  }
+
+  /* Sectietitel */
+  .sectie-titel {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--domein-blauw);
+  }
+
+  /* Footer met illustratie + CTA */
+  .dashboard-footer {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: var(--domein-blauw-6);
+    padding: 32px;
+  }
+
+  .cta-blok {
+    flex: 1;
+  }
+
+  .cta-blok h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--contrast-blauw);
+    margin-bottom: 8px;
+  }
+
+  .cta-blok p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 16px;
+  }
+
+  .cta-link {
+    display: inline-block;
+    background: var(--contrast-blauw);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 24px;
+    text-decoration: none;
+  }
+
+  /* Illustration Placeholders */
+  .illustration-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--domein-blauw-5, #DDEFF8);
+    border: 2px dashed #8FCAE7;
+    border-radius: 0;
+    color: #154273;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .illustration-placeholder .ph-icon { opacity: 0.45; }
+  .illustration-placeholder .ph-label { font-size: 11px; font-weight: 600; color: #154273; line-height: 1.3; opacity: 0.7; }
+  .illustration-placeholder .ph-size { font-size: 10px; color: #154273; opacity: 0.45; }
+
+  /* Standaard footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--domein-blauw-5);
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .infographic { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <header class="header">
+    <div class="logo-wrapper">
+      <!-- Inline SVG logo -->
+      <svg height="80" viewBox="0 0 275 125" xmlns="http://www.w3.org/2000/svg" aria-label="Belastingdienst logo">
+        <style>.st0{fill:none;}.st1{fill:#154273;}</style>
+        <rect y="0" class="st0" width="275" height="125"/>
+        <rect y="0" class="st1" width="50" height="100"/>
+        <text x="58" y="115" font-family="'RO Sans',sans-serif" font-size="16" font-weight="700" fill="#154273">Belastingdienst</text>
+      </svg>
+    </div>
+    <h1>Feiten en cijfers inkomstenbelasting 2024</h1>
+    <p class="subtitle">Overzicht van de belangrijkste kengetallen uit het aangifteproces</p>
+  </header>
+
+  <!-- Sectietitel -->
+  <h2 class="sectie-titel">Kerncijfers</h2>
+
+  <!-- 2-koloms dashboard grid -->
+  <section class="dashboard-grid">
+
+    <!-- Linkerkolom: stat-cards + donut -->
+    <div class="dashboard-links">
+
+      <!-- Stat-card 1 -->
+      <div class="stat-card">
+        <div class="stat-card-content">
+          <div class="groot-nummer">8,3 miljoen</div>
+          <div class="stat-label">Aangiften ingediend</div>
+          <div class="stat-beschrijving">Totaal aantal ontvangen aangiften inkomstenbelasting over belastingjaar 2024</div>
+        </div>
+        <div class="illustration-placeholder" style="width:140px;height:140px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>aangiften</span>
+          <span class="ph-size">140 x 140</span>
+        </div>
+      </div>
+
+      <!-- Stat-card 2 -->
+      <div class="stat-card">
+        <div class="stat-card-content">
+          <div class="groot-nummer">9,3 miljoen</div>
+          <div class="stat-label">Belastingplichtigen</div>
+          <div class="stat-beschrijving">Totaal aantal belastingplichtigen voor de inkomstenbelasting</div>
+        </div>
+        <div class="illustration-placeholder" style="width:140px;height:140px;" role="img" aria-label="Illustratie placeholder">
+          <svg class="ph-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="ph-label">Illustratie:<br>belastingplichtigen</span>
+          <span class="ph-size">140 x 140</span>
+        </div>
+      </div>
+
+      <!-- Donut chart -->
+      <div class="donut-sectie">
+        <h3>Verdeling aangiftekanaal</h3>
+        <div class="donut-wrapper">
+          <!-- SVG donut chart voorbeeld -->
+          <svg class="donut-chart" width="140" height="140" viewBox="0 0 36 36">
+            <!-- Achtergrond cirkel -->
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--domein-blauw-5)" stroke-width="3.8"/>
+            <!-- Segment 1: 62% Online -->
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--contrast-blauw)" stroke-width="3.8"
+                    stroke-dasharray="62 38" stroke-dashoffset="25" stroke-linecap="butt"/>
+            <!-- Segment 2: 25% Adviseur -->
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--domein-blauw)" stroke-width="3.8"
+                    stroke-dasharray="25 75" stroke-dashoffset="63" stroke-linecap="butt"/>
+            <!-- Segment 3: 13% Papier -->
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--domein-blauw-3)" stroke-width="3.8"
+                    stroke-dasharray="13 87" stroke-dashoffset="38" stroke-linecap="butt"/>
+            <!-- Midden tekst -->
+            <text x="18" y="17" text-anchor="middle" font-size="4" font-weight="700" fill="var(--contrast-blauw)" font-family="'RO Sans',sans-serif">8,3</text>
+            <text x="18" y="21" text-anchor="middle" font-size="2.2" fill="#666" font-family="'RO Sans',sans-serif">miljoen</text>
+          </svg>
+          <ul class="donut-legenda">
+            <li>
+              <div class="legenda-kleur" style="background: var(--contrast-blauw);"></div>
+              <span><strong>62%</strong> Online via Mijn Belastingdienst</span>
+            </li>
+            <li>
+              <div class="legenda-kleur" style="background: var(--domein-blauw);"></div>
+              <span><strong>25%</strong> Via belastingadviseur</span>
+            </li>
+            <li>
+              <div class="legenda-kleur" style="background: var(--domein-blauw-3);"></div>
+              <span><strong>13%</strong> Papieren aangifte</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Rechterkolom: tekstvlakken met opsommingen -->
+    <div class="dashboard-rechts">
+
+      <div class="tekst-blok">
+        <h3>Digitale dienstverlening</h3>
+        <ul>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">12,4 miljoen</span> bezoekers op Belastingdienst.nl</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">2,1 miljoen</span> vragen via de BelastingTelefoon</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">680.000</span> burgers geholpen via aangiftehulp</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">94%</span> tevredenheid online aangifte</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tekst-blok">
+        <h3>Belangrijke data</h3>
+        <ul>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><strong>1 maart 2025</strong> — Start aangifteperiode</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><strong>1 mei 2025</strong> — Deadline aangifte indienen</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><strong>1 september 2025</strong> — Uitstel-deadline via adviseur</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><strong>1 juli 2025</strong> — Eerste voorlopige aanslagen verstuurd</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tekst-blok">
+        <h3>Resultaten</h3>
+        <ul>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">5,2 miljoen</span> aanslagen opgelegd</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span><span class="highlight-getal">3,8 miljard</span> euro teruggegeven aan burgers</span>
+          </li>
+          <li>
+            <div class="bullet-icon"></div>
+            <span>Gemiddelde doorlooptijd: <span class="highlight-getal">6 weken</span></span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Footer met illustratie + CTA -->
+  <section class="dashboard-footer">
+    <div class="illustration-placeholder" style="width:120px;height:120px;" role="img" aria-label="Illustratie placeholder">
+      <svg class="ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#154273" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="0" ry="0"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <span class="ph-label">Illustratie:<br>conclusie</span>
+      <span class="ph-size">120 x 120</span>
+    </div>
+    <div class="cta-blok">
+      <h3>Meer weten?</h3>
+      <p>Bekijk het volledige jaarverslag en alle kengetallen op de website van de Belastingdienst.</p>
+      <a href="#" class="cta-link">Bekijk het jaarverslag</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Belastingdienst &mdash; Meer informatie: belastingdienst.nl</p>
+  </footer>
+
+</div>
+</body>
+</html>
