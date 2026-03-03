@@ -1431,7 +1431,7 @@ function createSlide(type, data) {
 function renderSlideHTML(slide, editable) {
   const ce = editable ? 'contenteditable="true"' : '';
   const d = slide.data;
-  const header = '<div class="slide-header-bar"><div class="slide-logo">' + LOGO_SVG + '</div></div>';
+  const header = '<div class="slide-header-bar"><div class="slide-logo"><img src="logo.svg" alt="Logo" style="height:100%;width:auto;"></div></div>';
 
   switch (slide.type) {
     case 'cover':
