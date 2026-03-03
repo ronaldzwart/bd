@@ -22,37 +22,96 @@ if (!$input) {
     exit(1);
 }
 
-$apiKey = $input['api_key'] ?? '';
-if (!$apiKey) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing api_key']);
-    exit(1);
+$target = $input['target'] ?? 'anthropic';
+
+if ($target === 'gemini') {
+    // ── Gemini Image Generation API ──
+    $geminiKey = $input['api_key'] ?? '';
+    if (!$geminiKey) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing Gemini API key']);
+        exit(1);
+    }
+
+    $prompt = $input['prompt'] ?? '';
+    if (!$prompt) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing prompt']);
+        exit(1);
+    }
+
+    $model = $input['model'] ?? 'gemini-3.1-flash-image-preview';
+    $aspectRatio = $input['aspect_ratio'] ?? '1:1';
+    $imageSize = $input['image_size'] ?? null;
+
+    $imageConfig = [
+        'aspectRatio' => $aspectRatio,
+    ];
+    if ($imageSize) {
+        $imageConfig['imageSize'] = $imageSize;
+    }
+
+    $geminiPayload = json_encode([
+        'contents' => [
+            ['parts' => [['text' => $prompt]]]
+        ],
+        'generationConfig' => [
+            'responseModalities' => ['TEXT', 'IMAGE'],
+            'imageConfig' => $imageConfig,
+        ],
+    ]);
+
+    $geminiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent';
+
+    $ch = curl_init($geminiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 180,
+        CURLOPT_CONNECTTIMEOUT => 30,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'x-goog-api-key: ' . $geminiKey,
+        ],
+        CURLOPT_POSTFIELDS => $geminiPayload,
+    ]);
+} else {
+    // ── Anthropic Claude API ──
+    $apiKey = $input['api_key'] ?? '';
+    if (!$apiKey) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing api_key']);
+        exit(1);
+    }
+
+    $system = $input['system'] ?? '';
+    $messages = $input['messages'] ?? [];
+    $model = $input['model'] ?? 'claude-sonnet-4-5-20250929';
+    $maxTokens = $input['max_tokens'] ?? 4096;
+
+    $payload = json_encode([
+        'model' => $model,
+        'max_tokens' => $maxTokens,
+        'system' => $system,
+        'messages' => $messages,
+    ]);
+
+    $timeout = ($maxTokens > 8000) ? 300 : 120;
+
+    $ch = curl_init('https://api.anthropic.com/v1/messages');
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => $timeout,
+        CURLOPT_CONNECTTIMEOUT => 30,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'x-api-key: ' . $apiKey,
+            'anthropic-version: 2023-06-01',
+        ],
+        CURLOPT_POSTFIELDS => $payload,
+    ]);
 }
-
-$system = $input['system'] ?? '';
-$messages = $input['messages'] ?? [];
-$model = $input['model'] ?? 'claude-sonnet-4-5-20250929';
-$maxTokens = $input['max_tokens'] ?? 4096;
-
-$payload = json_encode([
-    'model' => $model,
-    'max_tokens' => $maxTokens,
-    'system' => $system,
-    'messages' => $messages,
-]);
-
-$ch = curl_init('https://api.anthropic.com/v1/messages');
-curl_setopt_array($ch, [
-    CURLOPT_POST => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 120,
-    CURLOPT_HTTPHEADER => [
-        'Content-Type: application/json',
-        'x-api-key: ' . $apiKey,
-        'anthropic-version: 2023-06-01',
-    ],
-    CURLOPT_POSTFIELDS => $payload,
-]);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

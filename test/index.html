@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Content Generator – Test</title>
-    <link rel="stylesheet" href="../styles.css?v=8" />
+    <title>Content Toolkit</title>
+    <link rel="stylesheet" href="styles.css?v=25" />
   </head>
   <body>
     <div class="app">
       <aside class="sidebar">
         <div class="sidebar-brand">
-          <div class="sidebar-logo">CG</div>
+          <div class="sidebar-logo">CT</div>
           <div>
-            <div class="sidebar-title">Content Generator</div>
+            <div class="sidebar-title">Content Toolkit</div>
             <div class="sidebar-sub">v2.0 – Skills</div>
           </div>
         </div>
@@ -136,10 +136,37 @@
           <!-- Section: Bronnen -->
           <section class="section" id="sectionBronnen">
             <div class="section-header">
-              <h2>Voeg bronnen toe</h2>
-              <p class="section-desc">Upload bestanden of plak tekst als bron voor je content.</p>
+              <h2 id="bronnenTitle">Voeg bronnen toe</h2>
+              <p class="section-desc" id="bronnenDesc">Upload bestanden of plak tekst als bron voor je content.</p>
             </div>
-            <div class="upload">
+            <!-- Illustration mode panel (shown only for Illustraties category) -->
+            <div class="illustration-mode-panel" id="illustrationModePanel" style="display:none;">
+              <!-- Gemini API Key -->
+              <div class="illustration-api-key-field">
+                <div class="illustration-api-key-inner">
+                  <div class="illustration-api-key-icon">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                  </div>
+                  <div class="illustration-api-key-content">
+                    <label class="label" for="illustrationApiKeyInput">Gemini API Key</label>
+                    <input class="input" id="illustrationApiKeyInput" type="password" placeholder="Voer je Google Gemini API key in..." />
+                    <span class="illustration-api-key-hint">Vereist voor het genereren van illustraties — <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#154273;">Haal een key op</a></span>
+                  </div>
+                </div>
+              </div>
+              <!-- Eerder gegenereerde illustraties -->
+              <div class="illustration-history" id="illustrationHistory" style="display:none;">
+                <label class="label">Eerder gegenereerd</label>
+                <div class="illustration-history-grid" id="illustrationHistoryGrid"></div>
+              </div>
+              <!-- Beschrijving invoerveld -->
+              <div class="illustration-description-field">
+                <label class="label" for="illustrationDescription">Nieuwe illustratie genereren</label>
+                <textarea class="textarea" id="illustrationDescription" placeholder="Beschrijf wat je wilt zien in de illustratie, bijv. 'Een persoon die online aangifte doet achter een laptop, huiselijke setting'"></textarea>
+                <span class="illustration-desc-hint">Beschrijf de scene, personen en context. De AI genereert automatisch een Rijkshuisstijl-conforme illustratie.</span>
+              </div>
+            </div>
+            <div class="upload" id="uploadSection">
               <input id="fileInput" class="file-input" type="file" multiple />
               <div class="upload-drop" id="uploadDrop">
                 <div class="upload-icon-wrap">
@@ -222,6 +249,47 @@
                 </div>
               </div>
             </div>
+
+            <!-- Infographic Viewer (shown when infographic skill is active) -->
+            <div class="infographic-viewer" id="infographicViewer" style="display:none;">
+              <div class="infographic-header">
+                <span class="infographic-badge">Infographic Preview</span>
+              </div>
+              <div class="infographic-frame">
+                <!-- iframe wordt dynamisch toegevoegd door app.js -->
+              </div>
+            </div>
+            <!-- Illustration Viewer (shown when illustration skill is active) -->
+            <div class="illustration-viewer" id="illustrationViewer" style="display:none;">
+              <div class="illustration-header">
+                <span class="illustration-badge">Illustratie</span>
+                <div class="illustration-actions">
+                  <button class="illustration-action-btn" id="downloadImageBtn" type="button">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download
+                  </button>
+                  <button class="illustration-action-btn ghost" id="togglePromptBtn" type="button">Toon prompt</button>
+                  <button class="illustration-action-btn primary" id="regenerateIllustrationBtn" type="button">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Opnieuw genereren
+                  </button>
+                </div>
+              </div>
+              <div class="illustration-image-container">
+                <img id="illustrationImage" alt="Gegenereerde illustratie" />
+              </div>
+              <div id="galleryStrip" class="gallery-strip"></div>
+              <div class="illustration-prompt-container" id="promptContainer" style="display:none;">
+                <div class="illustration-prompt-header">
+                  <span class="illustration-prompt-label">Gegenereerde prompt</span>
+                  <button class="copy-prompt-btn" id="copyPromptBtn" type="button">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    Kopieer
+                  </button>
+                </div>
+                <pre class="illustration-prompt" id="illustrationPrompt"></pre>
+              </div>
+            </div>
             <div class="prompt-row">
               <input class="input" type="text" placeholder="Prompt waaraan de uiting moet voldoen..." />
               <button class="btn primary generate-btn" id="generateBtn" type="button">
@@ -270,11 +338,16 @@
                 <span class="export-card-label">Vector</span>
               </button>
             </div>
+            <div class="export-error" id="exportError" style="display:none;">
+              <span class="export-error-icon">!</span> Kies eerst een exportformaat
+            </div>
             <div class="section-nav">
               <button class="btn ghost prev-btn" data-prev="preview" type="button">
                 <span class="arrow">&#8592;</span> Terug naar preview
               </button>
-              <div></div>
+              <button class="btn primary" id="exportBtn" type="button">
+                Exporteren <span class="arrow">&#8594;</span>
+              </button>
             </div>
           </section>
         </div>
@@ -300,7 +373,6 @@
       </div>
     </div>
 
-    <script src="logo.js?v=1"></script>
-    <script src="app.js?v=1"></script>
+    <script src="app.js?v=25"></script>
   </body>
 </html>
