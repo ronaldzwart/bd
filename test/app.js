@@ -1411,7 +1411,7 @@ const nextSlideBtn = document.getElementById('nextSlide');
 const addSlideBtn = document.getElementById('addSlideBtn');
 const slideTypePicker = document.getElementById('slideTypePicker');
 
-const LOGO_SVG = '<svg viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">Content Toolkit</text></svg>';
+const LOGO_SVG = '<img src="logo.svg" alt="Logo" style="height:100%;width:auto;">';
 
 let slides = [];
 let currentSlide = 0;
